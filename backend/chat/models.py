@@ -7,6 +7,3 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=15)
     photo = models.ImageField(upload_to='images/', blank=True, null=True)
 
-class Test(models.Model):
-    title = models.CharField(max_length=100)
-

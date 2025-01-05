@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.sites',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -42,6 +43,8 @@ INSTALLED_APPS = [
 
     'chat',
     'django_extensions',
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -59,7 +63,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,6 +89,7 @@ DATABASES = {
     }
 }
 
+SITE_ID = 1
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -105,6 +110,22 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'chat.CustomUser'
+
+# Настройки для Allauth
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Обязательно подтверждение электронной почты
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Позволяет входить по имени пользователя или электронной почте
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_PASSWORD_MIN_LENGTH = 8  # Минимальная длина пароля
+
+# Настройки SMTP
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.yandex.ru'
+# EMAIL_PORT = 587  # Используйте 465 для SSL
+# EMAIL_USE_TLS = True  # Установите на True, если используете порт 587
+# # EMAIL_USE_SSL = True  # Установите на True, если используете порт 465
+# EMAIL_HOST_USER = 'igoroshust@yandex.ru'  # Ваш адрес электронной почты на Яндексе
+# EMAIL_HOST_PASSWORD = 'Lam3r.wOw123'  # Ваш пароль от Яндекс.Почты
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
