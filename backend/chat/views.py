@@ -11,3 +11,9 @@ def signup(request):
 
 def empty_main(request):
     return render(request, '../templates/chat/empty-main.html')
+
+def user_list(request):
+    return render(request, '../templates/chat/user-list.html')
+
+def user_profile(request):
+    return render(request, '../templates/chat/user-profile.html')

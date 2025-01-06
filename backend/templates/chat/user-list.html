@@ -43,23 +43,83 @@
     </div>
    </div>
 
-   <!-- Main Chat Area -->
+  <!-- Main Content Area -->
    <div class="flex-1 flex flex-col">
     <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
-     <h2 class="text-lg font-semibold">QuickChat</h2>
-
+     <h2 class="text-lg font-semibold">Список контактов</h2>
      <button class="text-gray-500" id="optionsButton">
       <i class="fas fa-ellipsis-v"></i>
      </button>
     </div>
 
-    <div class="flex-1 p-4 flex items-center justify-center">
-     <div class="text-center">
-      <img alt="Placeholder image for no messages" class="mx-auto mb-4" height="200" src="https://storage.googleapis.com/a1aa/image/F1pEDq51xfVEBq6MwgAIJq5Veagsx3ne6zuUBnqcFlNQ3tDoA.jpg" width="200"/>
-      <h3 class="text-lg font-semibold mb-2">Сообщений не найдено</h3>
-      <p class="text-gray-500 mb-4">Начните диалог или создайте групповой чат.</p>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" id="startChatButton">Начать общение</button>
-     </div>
+    <div class="flex-1 p-4 overflow-y-auto">
+     <ul>
+      <li class="mb-4" >
+       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
+        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+        <div class="ml-4" onclick="window.location.href='{% url 'user_profile' %}'">
+         <h3 class="text-lg font-semibold">
+          User 1
+         </h3>
+         <p class="text-sm text-gray-500">
+          user1@example.com
+         </p>
+        </div>
+       </a>
+      </li>
+      <li class="mb-4">
+       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
+        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+        <div class="ml-4">
+         <h3 class="text-lg font-semibold">
+          User 2
+         </h3>
+         <p class="text-sm text-gray-500">
+          user2@example.com
+         </p>
+        </div>
+       </a>
+      </li>
+      <li class="mb-4">
+       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
+        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+        <div class="ml-4">
+         <h3 class="text-lg font-semibold">
+          User 3
+         </h3>
+         <p class="text-sm text-gray-500">
+          user3@example.com
+         </p>
+        </div>
+       </a>
+      </li>
+      <li class="mb-4">
+       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
+        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+        <div class="ml-4">
+         <h3 class="text-lg font-semibold">
+          User 4
+         </h3>
+         <p class="text-sm text-gray-500">
+          user4@example.com
+         </p>
+        </div>
+       </a>
+      </li>
+      <li class="mb-4">
+       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
+        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+        <div class="ml-4">
+         <h3 class="text-lg font-semibold">
+          User 5
+         </h3>
+         <p class="text-sm text-gray-500">
+          user5@example.com
+         </p>
+        </div>
+       </a>
+      </li>
+     </ul>
     </div>
    </div>
 
