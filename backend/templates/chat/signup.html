@@ -1,0 +1,65 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+
+  <title>QuickChat</title>
+ </head>
+
+ <body class="bg-gray-100">
+  <div class="flex h-screen">
+   <!-- Sidebar -->
+   <div class="w-1/4 bg-white p-4 border-r flex flex-col">
+    <div>
+     <div class="flex items-center mb-4">
+      <img alt="QuickChat logo" class="w-12 h-12 rounded-full mr-3" height="50" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="50"/>
+      <div>
+       <div class="font-bold text-xl">QuickChat</div>
+      </div>
+     </div>
+
+     <div class="mb-4">
+      <div class="font-bold mb-2">Чаты</div>
+      <div class="flex items-center p-2 bg-gray-100 rounded">
+       <img alt="No chats available" class="rounded-full w-10 h-10 mr-2" height="40" src="https://storage.googleapis.com/a1aa/image/FxqxTyyLfEwYR6CC6bL3unJc6AfLvifYbSkP0JKpBVMyzuDoA.jpg" width="40"/>
+       <div class="text-gray-500">Сообщений нет</div>
+      </div>
+     </div>
+    </div>
+
+    <div class="mt-auto">
+          <button class="w-full bg-green-500 text-white py-2 rounded" style="margin-bottom: 10px" onclick="window.location.href='{% url 'login' %}'">Вход</button>
+     <button class="w-full bg-blue-500 text-white py-2 rounded" onclick="window.location.href='{% url 'signup' %}'">Регистрация</button>
+    </div>
+   </div>
+
+   <!-- Main Content -->
+   <div class="flex-1 p-4">
+    <div class="bg-white p-6 rounded-lg shadow-md mx-4">
+     <h2 class="text-2xl font-bold mb-4">Регистрация</h2>
+     <form>
+      <div class="mb-4">
+       <label class="block text-gray-700">Логин</label>
+       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите логин" type="text"/>
+      </div>
+      <div class="mb-4">
+       <label class="block text-gray-700">Почта</label>
+       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите почту" type="email"/>
+      </div>
+      <div class="mb-4">
+       <label class="block text-gray-700">Пароль</label>
+       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите пароль" type="password"/>
+      </div>
+      <div class="mb-4">
+       <label class="block text-gray-700">Подтвердите пароль</label>
+       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите пароль снова" type="password"/>
+      </div>
+      <button class="w-full py-2 bg-blue-500 text-white rounded-lg" onclick="window.location.href='{% url 'empty_main' %}'">Зарегистрироваться</button>
+     </form>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
