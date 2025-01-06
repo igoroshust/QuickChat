@@ -29,7 +29,7 @@
       <ul>
        <li class="mb-2">
         <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/bU267Tk4NO7cLtAuuhksfhFQ7W6ZbkvmB8dtuY8TqbC1d7AKA.jpg" width="40"/>
+         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/>
          <span class="ml-3 text-gray-500">Сообщений нет</span>
         </div>
        </li>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="p-4">
-     <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUserListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Список контактов</button>
+     <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUserListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Написать сообщение</button>
      <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton" onclick="window.location.href='{% url 'create_group' %}'">Создать группу</button>
     </div>
    </div>
@@ -48,9 +48,9 @@
     <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
      <h2 class="text-lg font-semibold">QuickChat</h2>
 
-     <button class="text-gray-500" id="optionsButton">
-      <i class="fas fa-ellipsis-v"></i>
-     </button>
+<!--     <button class="text-gray-500" id="optionsButton">-->
+<!--      <i class="fas fa-ellipsis-v"></i>-->
+<!--     </button>-->
     </div>
 
     <div class="flex-1 p-4 flex items-center justify-center">
@@ -58,7 +58,7 @@
       <img alt="Placeholder image for no messages" class="mx-auto mb-4" height="200" src="https://storage.googleapis.com/a1aa/image/F1pEDq51xfVEBq6MwgAIJq5Veagsx3ne6zuUBnqcFlNQ3tDoA.jpg" width="200"/>
       <h3 class="text-lg font-semibold mb-2">Сообщений не найдено</h3>
       <p class="text-gray-500 mb-4">Начните диалог или создайте групповой чат.</p>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" id="startChatButton">Начать общение</button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" id="startChatButton" onclick="window.location.href='{% url 'user_list' %}'">Начать общение</button>
      </div>
     </div>
    </div>

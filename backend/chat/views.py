@@ -23,3 +23,12 @@ def create_group(request):
 
 def empty_chat(request):
     return render(request, '../templates/chat/empty-chat.html')
+
+def empty_group(request):
+    return render(request, '../templates/chat/empty-group.html')
+
+def add_members(request):
+    return render(request, '../templates/chat/actions/add-members.html')
+
+def update_group(request):
+    return render(request, '../templates/chat/actions/update-group.html')

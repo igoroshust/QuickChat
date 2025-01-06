@@ -8,9 +8,14 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/chat/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/create-group.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/create-group.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/empty-chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/empty-chat.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/empty-main.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/empty-main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/signup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/user-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/user-list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/user-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/user-profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

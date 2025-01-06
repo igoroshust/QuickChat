@@ -10,4 +10,7 @@ urlpatterns = [
     path('user-profile/', user_profile, name="user_profile"),
     path('create-group/', create_group, name="create_group"),
     path('empty-chat/', empty_chat, name="empty_chat"),
+    path('empty-group/', empty_group, name="empty_group"),
+    path('add-members/', add_members, name="add_members"),
+    path('update-group/', update_group, name="update_group"),
 ]

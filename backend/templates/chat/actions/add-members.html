@@ -2,16 +2,17 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 
-  <title>Создать групповой чат</title>
+     <title>Добавить участников</title>
  </head>
 
  <body class="font-roboto bg-gray-100">
   <div class="flex h-screen">
-<!-- Sidebar -->
+  <!-- Sidebar -->
    <div class="w-1/4 bg-white border-r border-gray-200 hidden md:flex flex-col justify-between">
     <div>
      <div class="p-4 border-b border-gray-200">
@@ -23,13 +24,14 @@
        </div>
       </div>
      </div>
+
      <div class="p-4">
       <h3 class="text-lg font-semibold mb-2">Чаты</h3>
       <ul>
        <li class="mb-2">
         <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/>
-         <span class="ml-3 text-gray-500">Сообщений нет</span>
+         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="40"/>
+         <span class="ml-3 text-500">Название группы</span>
         </div>
        </li>
       </ul>
@@ -42,49 +44,38 @@
     </div>
    </div>
 
+
    <!-- Main Content Area -->
    <div class="flex-1 flex flex-col">
     <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
-     <h2 class="text-lg font-semibold">Создание группы</h2>
-<!--     <button class="text-gray-500" id="optionsButton">-->
-<!--      <i class="fas fa-ellipsis-v"></i>-->
-<!--     </button>-->
+     <h2 class="text-lg font-semibold">
+      Добавить участников
+     </h2>
+     <button class="text-gray-500" id="optionsButton">
+      <i class="fas fa-ellipsis-v">
+      </i>
+     </button>
     </div>
-
     <div class="flex-1 p-4 overflow-y-auto">
      <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
       <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="groupName">
-        Название группы
+       <label class="block text-gray-700 text-sm font-bold mb-2" for="member">
+        Имя участника
        </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupName" placeholder="Введите название" type="text"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="groupAvatar">
-        Изображение
-       </label>
-       <div class="flex items-center">
-        <img alt="Group avatar placeholder" class="w-16 h-16 rounded-full mr-4" height="64" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="64"/>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupAvatar" placeholder="Вставьте URL изображения" type="text"/>
-       </div>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="members">
-        Участники
-       </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="members" placeholder="Укажите участников через запятую" type="text"/>
+       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="member" placeholder="Введите имя" type="text"/>
       </div>
       <div class="flex items-center justify-between">
        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'empty_group' %}'">
-        Создать группу
+        Добавить
        </button>
-       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'empty_group' %}'">
+       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" id="cancelAddMembers" onclick="window.location.href='{% url 'empty_main' %}'">
         Отменить
        </button>
       </div>
      </form>
     </div>
    </div>
+
    <!-- Mobile Sidebar -->
    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden">
     <div class="flex justify-around p-2">
@@ -103,5 +94,10 @@
     </div>
    </div>
   </div>
+  <script>
+   document.getElementById('cancelAddMembers').addEventListener('click', function() {
+     window.history.back();
+   });
+  </script>
  </body>
 </html>
