@@ -17,3 +17,9 @@ def user_list(request):
 
 def user_profile(request):
     return render(request, '../templates/chat/user-profile.html')
+
+def create_group(request):
+    return render(request, '../templates/chat/create-group.html')
+
+def empty_chat(request):
+    return render(request, '../templates/chat/empty-chat.html')

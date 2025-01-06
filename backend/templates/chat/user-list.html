@@ -39,7 +39,7 @@
 
     <div class="p-4">
      <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUserListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Список контактов</button>
-     <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton">Создать чат</button>
+     <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton" onclick="window.location.href='{% url 'create_group' %}'">Создать группу</button>
     </div>
    </div>
 
@@ -54,10 +54,10 @@
 
     <div class="flex-1 p-4 overflow-y-auto">
      <ul>
-      <li class="mb-4" >
+      <li class="mb-4" onclick="window.location.href='{% url 'user_profile' %}'">
        <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
         <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
-        <div class="ml-4" onclick="window.location.href='{% url 'user_profile' %}'">
+        <div class="ml-4">
          <h3 class="text-lg font-semibold">
           User 1
          </h3>
