@@ -39,25 +39,41 @@
    <div class="flex-1 p-4">
     <div class="bg-white p-6 rounded-lg shadow-md mx-4">
      <h2 class="text-2xl font-bold mb-4">Регистрация</h2>
-     <form>
-      <div class="mb-4">
-       <label class="block text-gray-700">Логин</label>
-       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите логин" type="text"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700">Почта</label>
-       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите почту" type="email"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700">Пароль</label>
-       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите пароль" type="password"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700">Подтвердите пароль</label>
-       <input class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Введите пароль снова" type="password"/>
-      </div>
-      <button class="w-full py-2 bg-blue-500 text-white rounded-lg" onclick="window.location.href='{% url 'empty_main' %}'">Зарегистрироваться</button>
-     </form>
+      <form method="post" action="{% url 'account_signup' %}">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        <div class="text-red-500">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <div class="mb-4">
+        <label class="block text-gray-700">Логин</label>
+        <input class="w-full p-2 border border-gray-300 rounded-lg" name="username" placeholder="Введите логин" type="text" required/>
+        {% if form.username.errors %}
+            <div class="text-red-500">{{ form.username.errors }}</div>
+        {% endif %}
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700">Почта</label>
+        <input class="w-full p-2 border border-gray-300 rounded-lg" name="email" placeholder="Введите почту" type="email" required/>
+        {% if form.email.errors %}
+            <div class="text-red-500">{{ form.email.errors }}</div>
+        {% endif %}
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700">Пароль</label>
+        <input class="w-full p-2 border border-gray-300 rounded-lg" name="password1" placeholder="Введите пароль" type="password" required/>
+        {% if form.password1.errors %}
+            <div class="text-red-500">{{ form.password1.errors }}</div>
+        {% endif %}
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700">Подтвердите пароль</label>
+        <input class="w-full p-2 border border-gray-300 rounded-lg" name="password2" placeholder="Введите пароль снова" type="password" required/>
+        {% if form.password2.errors %}
+            <div class="text-red-500">{{ form.password2.errors }}</div>
+        {% endif %}
+    </div>
+    <button class="w-full py-2 bg-blue-500 text-white rounded-lg" type="submit">Зарегистрироваться</button>
+</form>
     </div>
    </div>
   </div>

@@ -111,15 +111,27 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'chat.CustomUser'
 
+# Настройки Allauth
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # Это нужно для аутентификации
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 # Настройки для Allauth
+ACCOUNT_FORMS = {'signup': 'chat.forms.CustomSignupForm'}
+ACCOUNT_SIGNUP_REDIRECT_URL = 'empty_main'
 ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Обязательно подтверждение электронной почты
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+# ACCOUNT_EMAIL_VERIFICATION = 'optional'  # optional - подтверждение электронной почты необязательно (mandatory)
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Позволяет входить по имени пользователя или электронной почте
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_PASSWORD_MIN_LENGTH = 8  # Минимальная длина пароля
+LOGIN_REDIRECT_URL = 'empty_main'  # URL, на который будет перенаправлен пользователь после входа
+
 
 # Настройки SMTP
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST = 'smtp.yandex.ru'
 # EMAIL_PORT = 587  # Используйте 465 для SSL
 # EMAIL_USE_TLS = True  # Установите на True, если используете порт 587
