@@ -32,3 +32,12 @@ def add_members(request):
 
 def update_group(request):
     return render(request, '../templates/chat/actions/update-group.html')
+
+def delete_group(request):
+    return render(request, '../templates/chat/actions/delete-group.html')
+
+def delete_chat(request):
+    return render(request, '../templates/chat/actions/delete-chat.html')
+
+def edit_profile(request):
+    return render(request, '../templates/chat/edit-profile.html')

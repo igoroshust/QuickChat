@@ -54,71 +54,76 @@
 
     <div class="flex-1 p-4 overflow-y-auto">
      <ul>
-      <li class="mb-4" onclick="window.location.href='{% url 'user_profile' %}'">
-       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
-        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
-        <div class="ml-4">
-         <h3 class="text-lg font-semibold">
-          User 1
-         </h3>
-         <p class="text-sm text-gray-500">
-          user1@example.com
-         </p>
+    <li class="mb-4" onclick="window.location.href='{% url 'user_profile' %}'">
+        <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 cursor-pointer">
+            <div class="flex items-center">
+                <img alt="User  avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+                <div class="ml-4">
+                    <h3 class="text-lg font-semibold">User  1</h3>
+                    <p class="text-sm text-gray-500">user1@example.com</p>
+                </div>
+            </div>
+            <button class="bg-blue-500 text-white py-2 px-4 rounded-lg" onclick="event.stopPropagation(); window.location.href='{% url 'empty_chat' %}'">
+                Написать
+            </button>
         </div>
-       </a>
-      </li>
-      <li class="mb-4">
-       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
-        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
-        <div class="ml-4">
-         <h3 class="text-lg font-semibold">
-          User 2
-         </h3>
-         <p class="text-sm text-gray-500">
-          user2@example.com
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="mb-4">
-       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
-        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
-        <div class="ml-4">
-         <h3 class="text-lg font-semibold">
-          User 3
-         </h3>
-         <p class="text-sm text-gray-500">
-          user3@example.com
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="mb-4">
-       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
-        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
-        <div class="ml-4">
-         <h3 class="text-lg font-semibold">
-          User 4
-         </h3>
-         <p class="text-sm text-gray-500">
-          user4@example.com
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="mb-4">
-       <a class="flex items-center p-4 bg-white rounded-lg shadow-md hover:bg-gray-100" href="#">
-        <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
-        <div class="ml-4">
-         <h3 class="text-lg font-semibold">
-          User 5
-         </h3>
-         <p class="text-sm text-gray-500">
-          user5@example.com
-         </p>
-        </div>
-       </a>
-      </li>
+    </li>
+    <li class="mb-4" onclick="window.location.href='{% url 'user_profile' %}'">
+            <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 cursor-pointer">
+                <div class="flex items-center">
+                    <img alt="User  avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold">User  1</h3>
+                        <p class="text-sm text-gray-500">user1@example.com</p>
+                    </div>
+                </div>
+                <button class="bg-blue-500 text-white py-2 px-4 rounded-lg" onclick="event.stopPropagation(); window.location.href='{% url 'empty_chat' %}'">
+                    Написать
+                </button>
+            </div>
+        </li>
+        <li class="mb-4" onclick="window.location.href='{% url 'user_profile' %}'">
+                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 cursor-pointer">
+                    <div class="flex items-center">
+                        <img alt="User  avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold">User  1</h3>
+                            <p class="text-sm text-gray-500">user1@example.com</p>
+                        </div>
+                    </div>
+                    <button class="bg-blue-500 text-white py-2 px-4 rounded-lg" onclick="event.stopPropagation(); window.location.href='{% url 'empty_chat' %}'">
+                        Написать
+                    </button>
+                </div>
+            </li>
+        <li class="mb-4" onclick="window.location.href='{% url 'user_profile' %}'">
+                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 cursor-pointer">
+                    <div class="flex items-center">
+                        <img alt="User  avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold">User  1</h3>
+                            <p class="text-sm text-gray-500">user1@example.com</p>
+                        </div>
+                    </div>
+                    <button class="bg-blue-500 text-white py-2 px-4 rounded-lg" onclick="event.stopPropagation(); window.location.href='{% url 'empty_chat' %}'">
+                        Написать
+                    </button>
+                </div>
+            </li>
+            <li class="mb-4" onclick="window.location.href='{% url 'user_profile' %}'">
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 cursor-pointer">
+                        <div class="flex items-center">
+                            <img alt="User  avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="50"/>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold">User  1</h3>
+                                <p class="text-sm text-gray-500">user1@example.com</p>
+                            </div>
+                        </div>
+                        <button class="bg-blue-500 text-white py-2 px-4 rounded-lg" onclick="event.stopPropagation(); window.location.href='{% url 'empty_chat' %}'">
+                            Написать
+                        </button>
+                    </div>
+                </li>
      </ul>
     </div>
    </div>

@@ -2,15 +2,16 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Личная переписка</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+
+  <title>Профиль пользователя</title>
  </head>
 
  <body class="font-roboto bg-gray-100">
   <div class="flex h-screen">
-      <!-- Sidebar -->
+<!-- Sidebar -->
    <div class="w-1/4 bg-white border-r border-gray-200 hidden md:flex flex-col justify-between">
     <div>
      <div class="p-4 border-b border-gray-200">
@@ -22,14 +23,13 @@
        </div>
       </div>
      </div>
-
      <div class="p-4">
       <h3 class="text-lg font-semibold mb-2">Чаты</h3>
       <ul>
        <li class="mb-2">
         <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="40"/>
-         <span class="ml-3 text-500">Название группы</span>
+         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/>
+         <span class="ml-3 text-gray-500">Сообщений нет</span>
         </div>
        </li>
       </ul>
@@ -42,56 +42,62 @@
     </div>
    </div>
 
-   <!-- Main Chat Area -->
+   <!-- Main Content Area -->
    <div class="flex-1 flex flex-col">
     <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
-        <div class="flex items-center p-2 rounded-lg">
-         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="40"/>
-         <span class="ml-3 text-500">Название группы</span>
-        </div>
+     <h2 class="text-lg font-semibold">Профиль</h2>
      <button class="text-gray-500" id="optionsButton">
       <i class="fas fa-ellipsis-v"></i>
      </button>
     </div>
 
     <div class="flex-1 p-4 overflow-y-auto">
-     <div class="flex mb-4">
-<!--      <img alt="User avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="40"/>-->
-<!--      <div class="ml-3 bg-gray-100 p-2 rounded-lg">-->
-<!--       <p class="text-sm">-->
-<!--        Hello, how are you?-->
-<!--       </p>-->
-<!--      </div>-->
-<!--     </div>-->
-<!--     <div class="flex mb-4 justify-end">-->
-<!--      <div class="mr-3 bg-blue-500 text-white p-2 rounded-lg">-->
-<!--       <p class="text-sm">-->
-<!--        I'm good, thanks!-->
-<!--       </p>-->
-<!--      </div>-->
-<!--      <img alt="User avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="40"/>-->
-<!--     </div>-->
-<!--     <div class="flex mb-4">-->
-<!--      <img alt="User avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="40"/>-->
-<!--      <div class="ml-3 bg-gray-100 p-2 rounded-lg">-->
-<!--       <p class="text-sm">-->
-<!--        What about you?-->
-<!--       </p>-->
-<!--      </div>-->
-     </div>
-    </div>
-
-    <div class="p-4 bg-white border-t border-gray-200">
-     <div class="flex items-center">
-      <input class="flex-1 p-2 border border-gray-300 rounded-lg" placeholder="Написать сообщение" type="text"/>
-      <button class="ml-2 text-blue-500">
-       <i class="fas fa-paper-plane"></i>
-      </button>
-     </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                <form>
+                    <div class="mb-4">
+                        <label for="username" class="block text-gray-700 font-semibold mb-2">Имя</label>
+                        <input type="text" id="username" class="w-full p-2 border border-gray-300 rounded-lg" value="User Name">
+                    </div>
+                    <div class="mb-4">
+                        <label for="avatar" class="block text-gray-700 font-semibold mb-2">Аватар</label>
+                        <div class="flex items-center">
+                            <label for="avatar-upload" class="cursor-pointer">
+                                <img src="https://storage.googleapis.com/a1aa/image/75l5o" alt="User Avatar" class="w-12 h-12 rounded-full mr-3">
+                            </label>
+                            <input type="file" id="avatar-upload" class="hidden">
+                            <input type="text" id="avatar" class="w-full p-2 border border-gray-300 rounded-lg" value="https://storage.googleapis.com/a1aa/image/75l5o">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="about" class="block text-gray-700 font-semibold mb-2">О себе</label>
+                        <textarea id="about" class="w-full p-2 border border-gray-300 rounded-lg" rows="4">Крутой парень</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="button" class="bg-blue-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'empty_main' %}'">Сохранить</button>
+                        <button type="button" class="bg-red-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'empty_main' %}'">Отменить</button>
+                    </div>
+                </form>
+            </div>
     </div>
    </div>
 
-   <!-- Options Modal -->
+   <!-- Mobile Sidebar -->
+   <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden">
+    <div class="flex justify-around p-2">
+     <button class="text-gray-500">
+      <i class="fas fa-comments">
+      </i>
+     </button>
+     <button class="text-gray-500">
+      <i class="fas fa-user">
+      </i>
+     </button>
+     <button class="text-gray-500">
+      <i class="fas fa-cog">
+      </i>
+     </button>
+    </div>
+   </div>   <!-- Options Modal -->
    <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden" id="optionsModal">
     <div class="bg-white p-6 rounded-lg shadow-lg w-3/4 md:w-1/3">
      <h3 class="text-lg font-semibold mb-4">
@@ -99,23 +105,8 @@
      </h3>
      <ul>
       <li class="mb-2">
-       <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'add_members' %}'">
-        Добавить участников
-       </button>
-      </li>
-      <li class="mb-2">
-       <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'update_group' %}'">
-        Редактировать группу
-       </button>
-      </li>
-      <li class="mb-2">
-       <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'delete_group' %}'">
-        Удалить группу
-       </button>
-      </li>
-      <li class="mb-2">
-       <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg">
-        Выйти из группы
+       <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'home' %}'">
+        Выйти из учётной записи
        </button>
       </li>
      </ul>
@@ -154,5 +145,6 @@
      document.getElementById('optionsModal').classList.add('hidden');
    });
   </script>
+
  </body>
 </html>
