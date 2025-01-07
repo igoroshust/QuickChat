@@ -1,13 +1,36 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from allauth.account.views import SignupView
+from .forms import CustomSignupForm
 
 def index(request):
-    return render(request, '../templates/index.html')
+    return render(request, '../templates/home.html')
 
-def login(request):
-    return render(request, '../templates/chat/login.html')
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')  # Замените 'home' на нужный вам URL
+        else:
+            # Обработка ошибки входа
+            return render(request, 'chat/login.html', {'error': 'Неверный логин или пароль'})
+    return render(request, 'chat/login.html')
 
 def signup(request):
-    return render(request, '../templates/chat/signup.html')
+    if request.method == 'POST':
+        form = CustomSignupForm(request.POST)
+        if form.is_valid():
+            form.save(request)  # Сохраняем пользователя
+            return redirect('home')  # Замените 'home' на нужный вам URL
+    else:
+        form = CustomSignupForm()
+
+    return render(request, 'chat/signup.html', {'form': form})
 
 def empty_main(request):
     return render(request, '../templates/chat/empty-main.html')

@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="05504364-ef91-482e-93ef-a27c81512f3d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/backend/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/chat/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -42,12 +44,13 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Python313/projects/recipe-app&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Python313/projects/QuickChat&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Python313\projects\QuickChat\backend\templates" />
       <recent name="C:\Python313\projects\QuickChat" />
     </key>
   </component>
