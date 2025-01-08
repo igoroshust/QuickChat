@@ -3,7 +3,7 @@
 {% block content %}
 <div class="bg-white p-6 rounded-lg shadow-md mx-4">
     <h2 class="text-2xl font-bold mb-4">Вход</h2>
-    <form method="post" action="{% url 'account_login' %}">
+    <form method="post" action="{% url 'main' %}"> <!-- login -->
         {% csrf_token %}
         <div class="mb-4">
             <label class="block text-gray-700">Логин</label>

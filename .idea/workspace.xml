@@ -6,11 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="05504364-ef91-482e-93ef-a27c81512f3d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/actions/add-members.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/actions/add-members.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/actions/delete-chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/actions/delete-chat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/actions/delete-group.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/actions/delete-group.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/actions/update-group.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/actions/update-group.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
