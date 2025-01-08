@@ -1,0 +1,72 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+
+  <title>{% block title %} QuickChat {% endblock %}</title>
+ </head>
+
+ <body class="font-roboto bg-gray-100">
+  <div class="flex h-screen">
+        {% include 'chat/components/sidebar.html' %}
+   </div>
+
+   <!-- Main Chat Area -->
+   <div class="flex-1 flex flex-col">
+    <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+     <h2 class="text-lg font-semibold">{% block header %} QuickChat {% endblock %}</h2>
+
+<!--     <button class="text-gray-500" id="optionsButton">-->
+<!--      <i class="fas fa-ellipsis-v"></i>-->
+<!--     </button>-->
+    </div>
+
+    <div class="flex-1 p-4 flex items-center justify-center">
+         {% block content %} {% endblock %}
+    </div>
+   </div>
+
+   <!-- Mobile Sidebar -->
+   <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden">
+    <div class="flex justify-around p-2">
+     <button class="text-gray-500">
+      <i class="fas fa-comments">
+      </i>
+     </button>
+     <button class="text-gray-500" id="openUserListButton">
+      <i class="fas fa-user">
+      </i>
+     </button>
+     <button class="text-gray-500">
+      <i class="fas fa-cog">
+      </i>
+     </button>
+    </div>
+   </div>
+
+  <script>
+   document.getElementById('createGroupChatButton').addEventListener('click', function() {
+     document.getElementById('createGroupChatModal').classList.remove('hidden');
+   });
+
+   document.getElementById('cancelCreateGroupChat').addEventListener('click', function() {
+     document.getElementById('createGroupChatModal').classList.add('hidden');
+   });
+
+   document.getElementById('viewUserListButton').addEventListener('click', function() {
+     document.getElementById('userListModal').classList.remove('hidden');
+   });
+
+   document.getElementById('openUserListButton').addEventListener('click', function() {
+     document.getElementById('userListModal').classList.remove('hidden');
+   });
+
+   document.getElementById('closeUserListModal').addEventListener('click', function() {
+     document.getElementById('userListModal').classList.add('hidden');
+   });
+  </script>
+ </body>
+</html>

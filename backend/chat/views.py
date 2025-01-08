@@ -32,6 +32,12 @@ def signup(request):
 
     return render(request, 'chat/signup.html', {'form': form})
 
+def main(request):
+    return render(request, '../templates/chat/main.html')
+
+def sidebar(request):
+    return render(request, '../templates/chat/components/sidebar.html')
+
 def empty_main(request):
     return render(request, '../templates/chat/empty-main.html')
 
