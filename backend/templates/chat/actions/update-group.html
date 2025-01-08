@@ -1,56 +1,9 @@
-<html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+{% extends 'chat/main.html' %}
 
-  <title>Создать групповой чат</title>
- </head>
+{% block title %} QuickChat - Редактирование группы {% endblock %}
+{% block header %} <h2 class="text-lg font-semibold h-9 mt-3"> Редактировать группу </h2>{% endblock header %}
 
- <body class="font-roboto bg-gray-100">
-  <div class="flex h-screen">
-<!-- Sidebar -->
-   <div class="w-1/4 bg-white border-r border-gray-200 hidden md:flex flex-col justify-between">
-    <div>
-     <div class="p-4 border-b border-gray-200">
-      <div class="flex items-center">
-       <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/IhE5uy5NlI4uIpl0e3T5LAf9h0loNHPDYdWEfwpHFzQb3tDoA.jpg" width="50"/>
-       <div class="ml-3">
-        <h2 class="text-lg font-semibold">User Name</h2>
-        <button class="text-sm text-gray-500">Изменить</button>
-       </div>
-      </div>
-     </div>
-     <div class="p-4">
-      <h3 class="text-lg font-semibold mb-2">Чаты</h3>
-      <ul>
-       <li class="mb-2">
-        <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/>
-         <span class="ml-3 text-gray-500">Сообщений нет</span>
-        </div>
-       </li>
-      </ul>
-     </div>
-    </div>
-
-    <div class="p-4">
-     <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUserListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Написать сообщение</button>
-     <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton" onclick="window.location.href='{% url 'create_group' %}'">Создать группу</button>
-    </div>
-   </div>
-
-   <!-- Main Content Area -->
-   <div class="flex-1 flex flex-col">
-    <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
-     <h2 class="text-lg font-semibold">Редактирование группы</h2>
-<!--     <button class="text-gray-500" id="optionsButton">-->
-<!--      <i class="fas fa-ellipsis-v"></i>-->
-<!--     </button>-->
-    </div>
-
+{% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
      <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
       <div class="mb-4">
@@ -84,7 +37,7 @@
       </div>
      </form>
     </div>
-   </div>
+
    <!-- Mobile Sidebar -->
    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden">
     <div class="flex justify-around p-2">
@@ -102,6 +55,5 @@
      </button>
     </div>
    </div>
-  </div>
- </body>
-</html>
+
+{% endblock content %}
