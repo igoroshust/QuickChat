@@ -1,7 +1,7 @@
 {% extends 'chat/main.html' %}
 
 {% block title %} Мой профиль {% endblock %}
-{% block header %} Мой профиль {% endblock %}
+{% block header %}<h2 class="text-lg font-semibold h-9 mt-3"> Мой профиль </h2>{% endblock %}
 
 {% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
@@ -26,8 +26,8 @@
                         <textarea id="about" class="w-full p-2 border border-gray-300 rounded-lg" rows="4">Крутой парень</textarea>
                     </div>
                     <div class="flex justify-between">
-                        <button type="button" class="bg-blue-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'empty_main' %}'">Сохранить</button>
-                        <button type="button" class="bg-red-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'empty_main' %}'">Отменить</button>
+                        <button type="button" class="bg-blue-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'main' %}'">Сохранить</button>
+                        <button type="button" class="bg-red-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'main' %}'">Отменить</button>
                     </div>
                 </form>
             </div>

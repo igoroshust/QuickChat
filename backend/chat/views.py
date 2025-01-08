@@ -50,11 +50,11 @@ def user_profile(request):
 def create_group(request):
     return render(request, '../templates/chat/create-group.html')
 
-def empty_chat(request):
-    return render(request, '../templates/chat/empty-chat.html')
+def personal_chat(request):
+    return render(request, '../templates/chat/personal-chat.html')
 
-def empty_group(request):
-    return render(request, '../templates/chat/empty-group.html')
+def group_chat(request):
+    return render(request, '../templates/chat/group-chat.html')
 
 def add_members(request):
     return render(request, '../templates/chat/actions/add-members.html')

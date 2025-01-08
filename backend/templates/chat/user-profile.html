@@ -1,7 +1,7 @@
 {% extends 'chat/main.html' %}
 
 {% block title %} Информация о пользователе {% endblock %}
-{% block header %} Профиль пользователя {% endblock header %}
+{% block header %} <h2 class="text-lg font-semibold h-9 mt-3"> Профиль пользователя </h2>{% endblock header %}
 
 {% block content %}
     <div class="flex-1 p-4 overflow-y-auto mb-40">
@@ -25,7 +25,7 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'empty_chat' %}'">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' %}'">
                     Написать сообщение
                 </button>
                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
