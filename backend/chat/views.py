@@ -110,9 +110,9 @@ def update_group(request):
 def delete_group(request):
     return render(request, '../templates/chat/actions/delete-group.html')
 
-
-def delete_chat(request):
-    return render(request, '../templates/chat/actions/delete-chat.html')
+@login_required
+def delete_chat(request, user):
+    return render(request, '../templates/chat/actions/delete-chat.html', {'user': user})
 
 
 def edit_profile(request):

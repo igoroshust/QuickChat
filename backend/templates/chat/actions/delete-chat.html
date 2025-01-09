@@ -1,64 +1,19 @@
-<html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Удалить группу</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
- </head>
+{% extends 'chat/main.html' %}
 
- <body class="font-roboto bg-gray-100">
-  <div class="flex h-screen">
-       <!-- Sidebar -->
-   <div class="w-1/4 bg-white border-r border-gray-200 hidden md:flex flex-col justify-between">
-    <div>
-     <div class="p-4 border-b border-gray-200">
-      <div class="flex items-center">
-       <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/IhE5uy5NlI4uIpl0e3T5LAf9h0loNHPDYdWEfwpHFzQb3tDoA.jpg" width="50"/>
-       <div class="ml-3">
-        <h2 class="text-lg font-semibold">User Name</h2>
-        <button class="text-sm text-gray-500">Изменить</button>
-       </div>
-      </div>
-     </div>
+{% block title %} QuickChat - Удаление чата {% endblock %}
+{% block header %} <h2 class="text-lg font-semibold h-9 mt-3"> Удаление чата </h2>{% endblock header %}
 
-     <div class="p-4">
-      <h3 class="text-lg font-semibold mb-2">Чаты</h3>
-      <ul>
-       <li class="mb-2">
-        <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="40"/>
-         <span class="ml-3 text-500">Название группы</span>
-        </div>
-       </li>
-      </ul>
-     </div>
-    </div>
-
-    <div class="p-4">
-     <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUserListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Написать сообщение</button>
-     <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton" onclick="window.location.href='{% url 'create_group' %}'">Создать группу</button>
-    </div>
-   </div>
-
-   <!-- Main Content Area -->
-   <div class="flex-1 flex flex-col">
-    <div class="flex items-center justify-between p-4 bg-white border-b border-gray-200">
-     <h2 class="text-lg font-semibold">
-      Удаление чата с User 1
-     </h2>
-    </div>
+{% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
      <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
       <p class="mb-4">
        Вы действительно хотите удалить чат? Отменить это действие будет невозможно.
       </p>
       <div class="flex items-center justify-between">
-       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' %}'">
+       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' user %}'">
         Удалить
        </button>
-       <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" id="cancelDeleteChat" onclick="window.location.href='{% url 'personal_chat' %}'">
+       <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" id="cancelDeleteChat" onclick="window.location.href='{% url 'personal_chat' user %}'">
         Отменить
        </button>
       </div>
@@ -88,5 +43,5 @@
      window.history.back();
    });
   </script>
- </body>
-</html>
+
+{% endblock content %}

@@ -21,7 +21,7 @@
     {% for message in messages %}
         <div class="flex mb-4 {% if message.sender == request.user %}justify-end{% endif %}">
             {% if message.sender != request.user %}
-                <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.avatar_url }}" width="40"/>
+                <img alt="User avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.avatar_url }}" width="40"/>
             {% endif %}
             <div class="{% if message.sender == request.user %}mr-3 bg-blue-500 text-white{% else %}ml-3 bg-gray-100{% endif %} p-2 rounded-lg">
                 <p class="text-sm">{{ message.content }}</p>
@@ -60,7 +60,7 @@
                     </button>
                 </li>
                 <li class="mb-2">
-                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'delete_chat' %}'">
+                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'delete_chat' other_user.username %}'">
                         Удалить чат
                     </button>
                 </li>
@@ -94,5 +94,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('optionsButton').addEventListener('click', function() {
+        document.getElementById('optionsModal').classList.remove('hidden');
+    });
+
+    document.getElementById('closeModalButton').addEventListener('click', function() {
+        document.getElementById('optionsModal').classList.add('hidden');
+    });
+</script>
 
 {% endblock content %}
