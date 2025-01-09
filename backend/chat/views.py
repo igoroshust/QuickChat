@@ -50,9 +50,10 @@ def user_list(request):
     users = CustomUser.objects.exclude(username=request.user.username)
     return render(request, '../templates/chat/user-list.html', {'users': users})
 
-
-def user_profile(request):
-    return render(request, '../templates/chat/user-profile.html')
+@login_required
+def user_profile(request, user):
+    user_object = get_object_or_404(CustomUser , username=user)
+    return render(request, '../templates/chat/user-profile.html', {'user': user_object})
 
 
 def create_group(request):

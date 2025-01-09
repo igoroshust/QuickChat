@@ -9,23 +9,22 @@
             <div class="flex items-center mb-4">
                 <img alt="User  avatar placeholder" class="w-16 h-16 rounded-full" height="64" src="https://storage.googleapis.com/a1aa/image/75I5o1IriHrAFdYhshmhJkbbIsQcGTD7BnlSP4EffTycT2BUA.jpg" width="64"/>
                 <div class="ml-4">
-                    <h3 class="text-lg font-semibold">User  Name</h3>
-                    <p class="text-sm text-gray-500">user@example.com</p>
+                    <h3 class="text-lg font-semibold">{{ user.username }}</h3>
+                    <p class="text-sm text-gray-500">{{ user.email }}</p>
                 </div>
             </div>
 
             <div class="mb-4">
                 <h4 class="text-md font-semibold mb-2">Описание</h4>
-                <p class="text-sm text-gray-700">Всем привет. Я очень много работаю, поэтому отвечаю с задержкой. Не обижайтесь.</p>
+                <p class="text-sm text-gray-700">{{ user.about }}</p>
             </div>
             <div class="mb-4">
                 <h4 class="text-md font-semibold mb-2">Контактная информация</h4>
-                <p class="text-sm text-gray-700">Почта: user@example.com</p>
-                <p class="text-sm text-gray-700">Номер: +7 (123) 456-78-90</p>
+                <p class="text-sm text-gray-700">Номер: {{ user.phone_number }}</p>
             </div>
 
             <div class="flex items-center justify-between">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' %}'">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' user.username %}'">
                     Написать сообщение
                 </button>
                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
