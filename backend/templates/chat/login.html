@@ -3,7 +3,7 @@
 {% block content %}
 <div class="bg-white p-6 rounded-lg shadow-md mx-4">
     <h2 class="text-2xl font-bold mb-4">Вход</h2>
-    <form method="post" action="{% url 'main' %}"> <!-- login -->
+    <form method="post" action="{% url 'login' %}"> <!-- login -->
         {% csrf_token %}
         <div class="mb-4">
             <label class="block text-gray-700">Логин</label>
@@ -13,6 +13,9 @@
             <label class="block text-gray-700">Пароль</label>
             <input class="w-full p-2 border border-gray-300 rounded-lg" name="password" placeholder="Введите пароль" type="password" required/>
         </div>
+        {% if error %}
+            <div class="mb-4 text-red-500">{{ error }}</div>
+        {% endif %}
         <button class="w-full py-2 bg-blue-500 text-white rounded-lg" type="submit">Войти</button>
     </form>
 </div>

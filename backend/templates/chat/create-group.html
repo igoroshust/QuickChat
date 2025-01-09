@@ -5,12 +5,13 @@
 
 {% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
-     <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+     <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md" method="post" action="{% url 'create_group' %}">
+      {% csrf_token %}
       <div class="mb-4">
        <label class="block text-gray-700 text-sm font-bold mb-2" for="groupName">
         Название группы
        </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupName" placeholder="Введите название" type="text"/>
+       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupName" name="group_name" placeholder="Введите название" type="text" required/>
       </div>
       <div class="mb-4">
        <label class="block text-gray-700 text-sm font-bold mb-2" for="groupAvatar">
@@ -18,20 +19,20 @@
        </label>
        <div class="flex items-center">
         <img alt="Group avatar placeholder" class="w-16 h-16 rounded-full mr-4" height="64" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="64"/>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupAvatar" placeholder="Вставьте URL изображения" type="text"/>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupAvatar" name="group_avatar" placeholder="Вставьте URL изображения" type="text"/>
        </div>
       </div>
       <div class="mb-4">
        <label class="block text-gray-700 text-sm font-bold mb-2" for="members">
         Участники
        </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="members" placeholder="Укажите участников через запятую" type="text"/>
+       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="members" name="members" placeholder="Укажите участников через запятую" type="text" required/>
       </div>
       <div class="flex items-center justify-between">
-       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'group_chat' %}'">
+       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
         Создать группу
        </button>
-       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'group_chat' %}'">
+       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'user_list' %}'">
         Отменить
        </button>
       </div>
