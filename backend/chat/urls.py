@@ -11,6 +11,7 @@ urlpatterns = [
     path('user-profile/<str:user>/', user_profile, name="user_profile"),
     path('edit-profile/', edit_profile, name="edit_profile"),
     path('create-group/', create_group, name="create_group"),
+    path('group-chat/<int:group_id>/', group_chat_view, name='group_chat_view'),
     path('personal-chat/<str:user>/', chat_view, name="personal_chat"),
     path('delete-chat/<str:user>/', delete_chat, name='delete_chat'),  # Изменено
     path('add-members/', add_members, name="add_members"),

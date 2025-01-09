@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import CustomSignupForm
-from .models import CustomUser, Message
+from .models import CustomUser, Message, Group
 from django.db.models import Q
 
 
@@ -55,20 +55,58 @@ def user_profile(request, user):
     user_object = get_object_or_404(CustomUser , username=user)
     return render(request, '../templates/chat/user-profile.html', {'user': user_object})
 
-
+@login_required
 def create_group(request):
+    if request.method == 'POST':
+        group_name = request.POST['group_name']
+        group_avatar = request.POST.get('group_avatar', '')
+        members = request.POST['members'].split(',') # разделяем участников по запятой
+
+        # Создаём группу
+        group = Group.objects.create(name=group_name, image=group_avatar)
+
+        # Добавляем участников в группу
+        for member in members:
+            user = get_object_or_404(CustomUser, username=member.strip())
+            group.members.add(user)
+
+        # Перенаправляем на страницу чата группы
+        return redirect('group_chat_view', group_id=group.id)
+
     return render(request, '../templates/chat/create-group.html')
 
+@login_required
+def group_chat_view(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    messages = Message.objects.filter(group=group).order_by('timestamp')
+
+    return render(request, 'chat/chat.html', {
+        'messages': messages,
+        'chat_title': group.name,
+        'chat_avatar_url': group.image,
+        'chat_type': 'group',
+        'group': group
+    })
 
 @login_required
 def send_message(request):
     if request.method == 'POST':
-        receiver_username = request.POST['receiver']
         content = request.POST['content']
-        receiver = get_object_or_404(CustomUser, username=receiver_username)
-        Message.objects.create(sender=request.user, receiver=receiver, content=content)
-        return redirect('personal_chat', user=receiver_username)  # Перенаправление на чат с получателем
+        group_id = request.POST.get('group_id')  # Получите ID группы из формы
+        receiver_username = request.POST.get('receiver')  # Получаем имя получателя, если это личный чат
 
+        if group_id:  # Если ID группы присутствует, значит, это групповой чат
+            group = get_object_or_404(Group, id=group_id)
+            Message.objects.create(sender=request.user, content=content, group=group)  # Создайте сообщение с указанием группы
+            return redirect('group_chat_view', group_id=group.id)  # Перенаправление на групповой чат
+        elif receiver_username:  # Если это личный чат
+            receiver = get_object_or_404(CustomUser , username=receiver_username)
+            Message.objects.create(sender=request.user, receiver=receiver, content=content)  # Создайте сообщение с указанием получателя
+            return redirect('personal_chat', user=receiver_username)  # Перенаправление на личный чат
+        else:
+            return redirect('main')  # Если ни то, ни другое, перенаправляем на главную страницу
+
+    return redirect('main')  # Если метод не POST, перенаправляем на главную страницу
 
 @login_required
 def chat_view(request, user):
@@ -85,20 +123,6 @@ def chat_view(request, user):
         'chat_avatar_url': other_user.photo,  # Замените на правильный URL аватара
         'chat_title': other_user.username  # Имя пользователя
     })
-
-
-@login_required
-def group_chat_view(request, group_id):
-    # Здесь вы можете реализовать логику для группового чата
-    # Например, получить сообщения группы и передать их в шаблон
-    messages = []  # Замените на вашу логику получения сообщений группы
-    return render(request, 'chat/chat.html', {
-        'messages': messages,
-        'chat_title': 'Название группы',  # Замените на название группы
-        'chat_avatar_url': 'URL_аватара_группы',  # Замените на URL аватара группы
-        'chat_type': 'group'  # Указываем тип чата
-    })
-
 
 def add_members(request):
     return render(request, '../templates/chat/actions/add-members.html')
