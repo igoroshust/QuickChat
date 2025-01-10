@@ -5,55 +5,49 @@
 
 {% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
-     <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="groupName">
-        Название группы
-       </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupName" placeholder="Введите название" type="text"  value="Название группы"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="groupAvatar">
-        Изображение
-       </label>
-       <div class="flex items-center">
-        <img alt="Group avatar placeholder" class="w-16 h-16 rounded-full mr-4" height="64" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="64"/>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupAvatar" placeholder="Вставьте URL изображения" type="text"  value="https://some-url.ru/?11231asdDSA.jpg/"/>
-       </div>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="members">
-        Участники
-       </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="members" placeholder="Укажите участников через запятую" type="text" value="User 1, User 2, User 3, User 4"/>
-      </div>
-      <div class="flex items-center justify-between">
-       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'group_chat' %}'">
-        Изменить
-       </button>
-       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'group_chat' %}'">
-        Отменить
-       </button>
-      </div>
-     </form>
+        <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md" method="POST" action="{% url 'edit_group' group.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="groupName">
+                    Название группы
+                </label>
+                {{ form.name }}
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="groupAvatar">
+                    Изображение
+                </label>
+                <div class="flex items-center p-2 rounded-lg bg-gray-200">
+                    <img id="group-avatar-preview" alt="Group avatar placeholder" class="w-16 h-16 rounded-full mr-4" height="64" src="{{ group.image.url }}" width="64"/>
+                    <input type="file" id="group-avatar-upload" name="image" class="hidden" accept="image/*" onchange="previewGroupImage(event)">
+                    <label for="group-avatar-upload" class="cursor-pointer text-gray-700 ">Изменить изображение</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="members">
+                    Участники
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="members" name="members" placeholder="Укажите участников через запятую" type="text" value="{{ group.members.all|join:', ' }}"/>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Изменить
+                </button>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'group_chat_view' group.id %}'">
+                    Отменить
+                </button>
+            </div>
+        </form>
     </div>
 
-   <!-- Mobile Sidebar -->
-   <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden">
-    <div class="flex justify-around p-2">
-     <button class="text-gray-500">
-      <i class="fas fa-comments">
-      </i>
-     </button>
-     <button class="text-gray-500">
-      <i class="fas fa-user">
-      </i>
-     </button>
-     <button class="text-gray-500">
-      <i class="fas fa-cog">
-      </i>
-     </button>
-    </div>
-   </div>
-
+    <script>
+        function previewGroupImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('group-avatar-preview');
+                output.src = reader.result;  // Обновляем изображение на фронте
+            }
+            reader.readAsDataURL(event.target.files[0]);  // Читаем файл как Data URL
+        }
+    </script>
 {% endblock content %}

@@ -5,21 +5,22 @@
 
 {% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
-     <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="member">
-        Имя участника
-       </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="member" placeholder="Введите имя" type="text"/>
-      </div>
-      <div class="flex items-center justify-between">
-       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'group_chat' %}'">
-        Добавить
-       </button>
-       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" id="cancelAddMembers" onclick="window.location.href='{% url 'group_chat' %}'">
-        Отменить
-       </button>
-      </div>
-     </form>
+        <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md" method="POST" action="{% url 'add_members' group.id %}">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="member">
+                    Имя участника
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="member" name="members" placeholder="Введите имя" type="text" required/>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Добавить
+                </button>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" id="cancelAddMembers" onclick="window.location.href='{% url 'group_chat_view' group.id %}'">
+                    Отменить
+                </button>
+            </div>
+        </form>
     </div>
 {% endblock content %}

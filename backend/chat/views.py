@@ -1,6 +1,8 @@
+import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,6 +10,7 @@ from .forms import CustomSignupForm, UserProfileForm, GroupForm
 from .models import CustomUser, Message, Group
 from django.db.models import Q
 
+logger = logging.getLogger(__name__)
 
 def index(request):
     return render(request, '../templates/home.html')
@@ -63,15 +66,16 @@ def create_group(request):
     if request.method == 'POST':
         group_name = request.POST['group_name']
         group_avatar = request.POST.get('group_avatar', '')
-        members = request.POST['members'].split(',') # разделяем участников по запятой
+        members = request.POST['members'].split(',')  # Разделяем участников по запятой
 
         # Создаём группу
         group = Group.objects.create(name=group_name, image=group_avatar)
 
         # Добавляем участников в группу
         for member in members:
-            user = get_object_or_404(CustomUser, username=member.strip())
+            user = get_object_or_404(CustomUser , username=member.strip())
             group.members.add(user)
+            logger.info(f'Пользователь "{user.username}" добавлен в группу "{group.name}".')
 
         # Перенаправляем на страницу чата группы
         return redirect('group_chat_view', group_id=group.id)
@@ -127,8 +131,30 @@ def chat_view(request, user):
         'chat_title': other_user.username  # Имя пользователя
     })
 
-def add_members(request):
-    return render(request, '../templates/chat/actions/add-members.html')
+@login_required
+def add_members(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+
+    if request.method == 'POST':
+        members = request.POST.get('members', '').split(',')  # Разделяем участников по запятой
+
+        # Добавляем участников в группу
+        for member in members:
+            member = member.strip()
+            try:
+                user = CustomUser .objects.get(username=member)
+                if not group.members.filter(id=user.id).exists():
+                    group.members.add(user)
+                    logger.info(f'Пользователь "{user.username}" добавлен в группу "{group.name}".')
+                else:
+                    logger.warning(f'Пользователь "{user.username}" уже является участником группы "{group.name}".')
+            except CustomUser .DoesNotExist:
+                logger.error(f'Пользователь с именем "{member}" не найден.')
+
+        # Перенаправляем на страницу чата группы
+        return redirect('group_chat_view', group_id=group.id)
+
+    return render(request, '../templates/chat/actions/add-members.html', {'group': group})
 
 
 def update_group(request):
@@ -185,6 +211,8 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         group = form.save(commit=False)
         group.save()
+
+        # Получаем участников из формы
         members = self.request.POST.get('members', '').split(',')
         for member in members:
             member = member.strip()
@@ -201,10 +229,32 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     form_class = GroupForm
     template_name = '../templates/chat/actions/update-group.html'
-    success_url = reverse_lazy('main')  # Перенаправление после успешного редактирования
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Group, id=self.kwargs['pk'])  # Получаем группу по ID
+        """Получаем группу по ID"""
+        return get_object_or_404(Group, id=self.kwargs['pk'])
+
+    def form_valid(self, form):
+        group = form.save(commit=False)  # Сохраняем изменения в группе, но не в БД
+        group.save()  # Сохраняем группу в БД
+
+        # Обработка участников
+        members = self.request.POST.get('members', '').split(',')  # Получаем участников из формы
+        group.members.clear()  # Удаляем всех текущих участников
+
+        for member in members:
+            member = member.strip()
+            try:
+                user = CustomUser .objects.get(username=member)
+                group.members.add(user)  # Добавляем нового участника
+            except CustomUser .DoesNotExist:
+                form.add_error('members', f'Пользователь с именем "{member}" не найден.')
+
+        return super().form_valid(form)  # Перенаправляем на success_url
+
+    def get_success_url(self):
+        """Возвращаем URL для перенаправления после успешного редактирования"""
+        return reverse_lazy('group_chat_view', kwargs={'group_id': self.object.id})
 
 class GroupDeleteView(LoginRequiredMixin, DeleteView):
     model = Group

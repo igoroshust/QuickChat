@@ -67,12 +67,12 @@
                 </li>
             {% elif chat_type == 'group' %}
                 <li class="mb-2">
-                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'add_members' %}'">
+                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'add_members' group.id %}'">
                         Добавить участников
                     </button>
                 </li>
                 <li class="mb-2">
-                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'update_group' %}'">
+                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'edit_group' group.id %}'">
                         Редактировать группу
                     </button>
                 </li>
