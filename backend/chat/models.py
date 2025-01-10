@@ -6,7 +6,7 @@ class CustomUser(AbstractUser):
     """Пользователь"""
     about = models.TextField()
     phone_number = models.CharField(max_length=15)
-    photo = models.ImageField(upload_to='images/', blank=True, null=True)
+    photo = models.ImageField(upload_to='images/', blank=True, null=True, default='images/user-default.png')
 
 class Message(models.Model):
     """Сообщение"""

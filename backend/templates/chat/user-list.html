@@ -12,7 +12,7 @@
             <li class="mb-4" onclick="window.location.href='{% url 'user_profile' user.username %}'">
                 <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-gray-100 cursor-pointer">
                     <div class="flex items-center">
-                        <img alt="User  avatar" class="w-10 h-10 rounded-full" height="50" src="{{ user.photo }}" width="50"/> <!-- user.photo.url -->
+                        <img alt="User  avatar" class="w-10 h-10 rounded-full" height="50" src="{{ user.photo.url }}" width="50"/> <!-- user.photo.url -->
                         <div class="ml-4">
                             <h3 class="text-lg font-semibold">{{ user.username }}</h3>
                             <p class="text-sm text-gray-500">{{ user.email }}</p>

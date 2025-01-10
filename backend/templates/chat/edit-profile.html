@@ -1,35 +1,51 @@
 {% extends 'chat/main.html' %}
+{% load custom_tags %}
 
 {% block title %} Мой профиль {% endblock %}
 {% block header %}<h2 class="text-lg font-semibold h-9 mt-3"> Мой профиль </h2>{% endblock %}
 
 {% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
-                 <div class="bg-white p-6 rounded-lg shadow-md">
-                <form>
-                    <div class="mb-4">
-                        <label for="username" class="block text-gray-700 font-semibold mb-2">Имя</label>
-                        <input type="text" id="username" class="w-full p-2 border border-gray-300 rounded-lg" value="User Name">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 font-semibold mb-2">Имя</label>
+                    {{ form.username }}  <!-- Отображаем поле без дополнительных меток -->
+                </div>
+
+                <div class="mb-4">
+                    <label for="avatar" class="block text-gray-700 font-semibold mb-2">Аватар</label>
+                    <div class="flex items-center flex-row">
+                        <label for="avatar-upload" class="cursor-pointer">
+                            <img id="avatar-preview" src="{{ user.photo.url }}" alt="User  Avatar" class="w-12 h-12 rounded-full mr-3">
+                        </label>
+                        <input type="file" id="avatar-upload" name="photo" class="hidden" accept="image/*" onchange="previewImage(event)">
                     </div>
-                    <div class="mb-4">
-                        <label for="avatar" class="block text-gray-700 font-semibold mb-2">Аватар</label>
-                        <div class="flex items-center">
-                            <label for="avatar-upload" class="cursor-pointer">
-                                <img src="https://storage.googleapis.com/a1aa/image/75l5o" alt="User Avatar" class="w-12 h-12 rounded-full mr-3">
-                            </label>
-                            <input type="file" id="avatar-upload" class="hidden">
-                            <input type="text" id="avatar" class="w-full p-2 border border-gray-300 rounded-lg" value="https://storage.googleapis.com/a1aa/image/75l5o">
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label for="about" class="block text-gray-700 font-semibold mb-2">О себе</label>
-                        <textarea id="about" class="w-full p-2 border border-gray-300 rounded-lg" rows="4">Крутой парень</textarea>
-                    </div>
-                    <div class="flex justify-between">
-                        <button type="button" class="bg-blue-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'main' %}'">Сохранить</button>
-                        <button type="button" class="bg-red-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'main' %}'">Отменить</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="about" class="block text-gray-700 font-semibold mb-2">О себе</label>
+                    {{ form.about }}  <!-- Отображаем поле без дополнительных меток -->
+                </div>
+
+                <div class="flex justify-between">
+                    <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg">Сохранить</button>
+                    <button type="button" class="bg-red-500 text-white px-6 py-3 rounded-lg" onclick="window.location.href='{% url 'main' %}'">Отменить</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('avatar-preview');
+                output.src = reader.result;  // Обновляем изображение на фронте
+            }
+            reader.readAsDataURL(event.target.files[0]);  // Читаем файл как Data URL
+        }
+    </script>
 {% endblock content %}

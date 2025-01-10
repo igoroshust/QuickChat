@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import UpdateView
+from django.urls import reverse_lazy
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import CustomSignupForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CustomSignupForm, UserProfileForm
 from .models import CustomUser, Message, Group
 from django.db.models import Q
 
@@ -140,5 +143,34 @@ def delete_chat(request, user):
     return render(request, '../templates/chat/actions/delete-chat.html', {'user': user})
 
 
+@login_required
 def edit_profile(request):
-    return render(request, '../templates/chat/edit-profile.html')
+    user_object = request.user
+
+    if request.method == 'POST':
+        user_object.username = request.POST.get('username', user_object.username)
+        user_object.about = request.POST.get('about', user_object.about)
+
+        # Обработка загрузки аватара
+        if request.FILES.get('avatar'):
+            user_object.photo = request.FILES['avatar']
+
+        user_object.save()
+        return redirect('main')
+
+    return render(request, '../templates/chat/edit-profile.html', {'user': user_object})
+
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    form_class = UserProfileForm
+    template_name = '../templates/chat/edit-profile.html'
+    success_url = reverse_lazy('main')
+
+    def get_object(self, queryset=None):
+        return self.request.user # Возвращаем только аутентифицированного пользователя
+
+    def form_valid(self, form):
+        """Обработка загрузки аватара"""
+        if self.request.FILES.get('photo'):
+            form.instance.photo = self.request.FILES['photo']
+        return super().form_valid(form) # Сохраняем форму

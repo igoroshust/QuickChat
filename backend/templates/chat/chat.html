@@ -6,7 +6,7 @@
 <div class="flex-1 flex flex-col">
     <div class="flex items-center justify-between bg-white">
         <div class="flex items-center p-2 rounded-lg">
-            <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ chat_avatar_url }}" width="40"/>
+            <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ chat_avatar_url.url }}" width="40"/>
             <span class="ml-3 text-500">{{ chat_title }}</span> <!-- Имя пользователя или название группы -->
         </div>
         <button class="text-gray-500" id="optionsButton">
@@ -27,7 +27,7 @@
                 <p class="text-sm">{{ message.content }}</p>
             </div>
             {% if message.sender == request.user %}
-                <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.photo }}" width="40"/>
+                <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.photo.url }}" width="40"/>
             {% endif %}
         </div>
     {% endfor %}

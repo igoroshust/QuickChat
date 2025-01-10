@@ -1,5 +1,8 @@
 from allauth.account.forms import SignupForm
+from django.contrib.auth import login
+from django.contrib.auth.backends import ModelBackend
 from django import forms
+from .models import *
 
 class CustomSignupForm(SignupForm):
     """Кастомная форма регистрации"""
@@ -13,4 +16,15 @@ class CustomSignupForm(SignupForm):
         user.email = self.cleaned_data['email']
         user.set_password(self.cleaned_data['password1'])
         user.save()
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend') # Вход в систему после регистрации
         return user
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'about', 'photo']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded-lg'}),
+            'about': forms.Textarea(attrs={'class': 'w-full p-2 border border-gray-300 rounded-lg', 'rows': 4}),
+            'photo': forms.FileInput(attrs={'class': 'hidden'}),  # Скрываем стандартный виджет
+        }
