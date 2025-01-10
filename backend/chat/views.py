@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CustomSignupForm, UserProfileForm
+from .forms import CustomSignupForm, UserProfileForm, GroupForm
 from .models import CustomUser, Message, Group
 from django.db.models import Q
 
@@ -86,7 +86,7 @@ def group_chat_view(request, group_id):
     return render(request, 'chat/chat.html', {
         'messages': messages,
         'chat_title': group.name,
-        'chat_avatar_url': group.image,
+        'chat_avatar_url': group.image if group.image else None,
         'chat_type': 'group',
         'group': group
     })
@@ -174,3 +174,42 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
         if self.request.FILES.get('photo'):
             form.instance.photo = self.request.FILES['photo']
         return super().form_valid(form) # Сохраняем форму
+
+
+class GroupCreateView(LoginRequiredMixin, CreateView):
+    model = Group
+    form_class = GroupForm
+    template_name = '../templates/chat/create-group.html'
+    success_url = reverse_lazy('main')
+
+    def form_valid(self, form):
+        group = form.save(commit=False)
+        group.save()
+        members = self.request.POST.get('members', '').split(',')
+        for member in members:
+            member = member.strip()
+            try:
+                user = CustomUser .objects.get(username=member)
+                group.members.add(user)
+            except CustomUser .DoesNotExist:
+                form.add_error('members', f'Пользователь с именем "{member}" не найден.')
+                # Перенаправляем на страницу чата группы
+
+        return redirect('group_chat_view', group_id=group.id)  # Здесь мы перенаправляем на страницу чата группы
+
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
+    model = Group
+    form_class = GroupForm
+    template_name = '../templates/chat/actions/update-group.html'
+    success_url = reverse_lazy('main')  # Перенаправление после успешного редактирования
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Group, id=self.kwargs['pk'])  # Получаем группу по ID
+
+class GroupDeleteView(LoginRequiredMixin, DeleteView):
+    model = Group
+    template_name = '../templates/chat/action/delete-group.html'
+    success_url = reverse_lazy('main')  # Перенаправление после успешного удаления
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Group, id=self.kwargs['pk'])  # Получаем группу по ID

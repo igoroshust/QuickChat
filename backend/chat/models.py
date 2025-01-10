@@ -22,8 +22,8 @@ class Message(models.Model):
 class Group(models.Model):
     """Группа"""
     name = models.CharField(max_length=255)
-    image = models.URLField(blank=True, null=True)
-    members = models.ManyToManyField(CustomUser)
+    image = models.ImageField(upload_to='images/', blank=True, null=True, default='images/group-default.jpg')
+    members = models.ManyToManyField(CustomUser, related_name='user_groups')
 
     def __str__(self):
         return self.name

@@ -28,3 +28,12 @@ class UserProfileForm(forms.ModelForm):
             'about': forms.Textarea(attrs={'class': 'w-full p-2 border border-gray-300 rounded-lg', 'rows': 4}),
             'photo': forms.FileInput(attrs={'class': 'hidden'}),  # Скрываем стандартный виджет
         }
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields =['name', 'image']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}),
+            'image': forms.FileInput(attrs={'class': 'hidden'}),
+        }

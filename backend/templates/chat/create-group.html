@@ -5,56 +5,61 @@
 
 {% block content %}
     <div class="flex-1 p-4 overflow-y-auto">
-     <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md" method="post" action="{% url 'create_group' %}">
-      {% csrf_token %}
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="groupName">
-        Название группы
-       </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupName" name="group_name" placeholder="Введите название" type="text" required/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="groupAvatar">
-        Изображение
-       </label>
-       <div class="flex items-center">
-        <img alt="Group avatar placeholder" class="w-16 h-16 rounded-full mr-4" height="64" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="64"/>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="groupAvatar" name="group_avatar" placeholder="Вставьте URL изображения" type="text"/>
-       </div>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700 text-sm font-bold mb-2" for="members">
-        Участники
-       </label>
-       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="members" name="members" placeholder="Укажите участников через запятую" type="text" required/>
-      </div>
-      <div class="flex items-center justify-between">
-       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-        Создать группу
-       </button>
-       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'user_list' %}'">
-        Отменить
-       </button>
-      </div>
-     </form>
+        <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md" method="post" action="{% url 'create_group' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="text-red-500">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="groupName">
+                    Название группы
+                </label>
+                {{ form.name }}  <!-- Используйте объект формы -->
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="groupAvatar">
+                    Изображение
+                </label>
+                <div class="flex items-center bg-gray-200 p-2 rounded-lg">
+                    <img id="group-avatar-preview" alt="Group avatar placeholder" class="w-16 h-16 rounded-full mr-4" height="64" src="https://storage.googleapis.com/a1aa/image/T2kkso6g3IYtB5Fm8cHzhiAzCimAZhA6sQTq9QCC8bRfW7AKA.jpg" width="64"/>
+                    <input type="file" id="group-avatar-upload" name="image" class="hidden" accept="image/*" onchange="previewGroupImage(event)">
+                    <label for="group-avatar-upload" class="cursor-pointer text-gray-700 ">Выберите изображение</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="members">
+                    Участники
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="members" name="members" placeholder="Укажите участников через запятую" type="text" required/>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Создать группу
+                </button>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'user_list' %}'">
+                    Отменить
+                </button>
+            </div>
+        </form>
     </div>
 
-   <!-- Mobile Sidebar -->
-   <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden">
-    <div class="flex justify-around p-2">
-     <button class="text-gray-500">
-      <i class="fas fa-comments">
-      </i>
-     </button>
-     <button class="text-gray-500">
-      <i class="fas fa-user">
-      </i>
-     </button>
-     <button class="text-gray-500">
-      <i class="fas fa-cog">
-      </i>
-     </button>
-    </div>
-   </div>
-
+    <script>
+        function previewGroupImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('group-avatar-preview');
+                output.src = reader.result;  // Обновляем изображение на фронте
+            }
+            reader.readAsDataURL(event.target.files[0]);  // Читаем файл как Data URL
+        }
+    </script>
 {% endblock content %}

@@ -12,9 +12,8 @@
       <change beforePath="$PROJECT_DIR$/backend/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/chat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/create-group.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/create-group.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/edit-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/edit-profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/user-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/user-list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/user-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/user-profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
