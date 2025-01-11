@@ -7,16 +7,19 @@
     <div class="flex-1 p-4 overflow-y-auto">
      <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
       <p class="mb-4">
-       Вы действительно хотите удалить чат? Отменить это действие будет невозможно.
+       Вы действительно хотите удалить чат c {{ other_user.username }}? Отменить это действие будет невозможно.
       </p>
-      <div class="flex items-center justify-between">
-       <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' user %}'">
-        Удалить
-       </button>
-       <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" id="cancelDeleteChat" onclick="window.location.href='{% url 'personal_chat' user %}'">
-        Отменить
-       </button>
-      </div>
+         <form method="POST">
+             {% csrf_token %}
+                   <div class="flex items-center justify-between">
+               <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Удалить
+               </button>
+           <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" id="cancelDeleteChat" onclick="window.history.back();">
+            Отменить
+           </button>
+          </div>
+         </form>
      </div>
     </div>
    </div>

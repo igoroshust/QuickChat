@@ -10,14 +10,14 @@
         {% endif %}
         <div class="mb-4">
             <label class="block text-gray-700">Логин</label>
-            <input class="w-full p-2 border border-gray-300 rounded-lg" name="username" placeholder="Введите логин" type="text" value="{{ form.username.value }}" required/>
+            <input class="w-full p-2 border border-gray-300 rounded-lg" name="username" placeholder="Введите логин" type="text" required/>
             {% if form.username.errors %}
                 <div class="text-red-500">{{ form.username.errors }}</div>
             {% endif %}
         </div>
         <div class="mb-4">
             <label class="block text-gray-700">Почта</label>
-            <input class="w-full p-2 border border-gray-300 rounded-lg" name="email" placeholder="Введите почту" type="email" value="{{ form.email.value }}" required/>
+            <input class="w-full p-2 border border-gray-300 rounded-lg" name="email" placeholder="Введите почту" type="email" required/>
             {% if form.email.errors %}
                 <div class="text-red-500">{{ form.email.errors }}</div>
             {% endif %}

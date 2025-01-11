@@ -7,7 +7,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CustomSignupForm, UserProfileForm, GroupForm
-from .models import CustomUser, Message, Group
+from .models import CustomUser, Message, Group, Chat
 from django.db.models import Q
 
 logger = logging.getLogger(__name__)
@@ -104,11 +104,15 @@ def send_message(request):
 
         if group_id:  # Если ID группы присутствует, значит, это групповой чат
             group = get_object_or_404(Group, id=group_id)
-            Message.objects.create(sender=request.user, content=content, group=group)  # Создайте сообщение с указанием группы
+            # Создайте сообщение с указанием группы
+            message = Message.objects.create(sender=request.user, content=content, group=group)
             return redirect('group_chat_view', group_id=group.id)  # Перенаправление на групповой чат
         elif receiver_username:  # Если это личный чат
             receiver = get_object_or_404(CustomUser , username=receiver_username)
-            Message.objects.create(sender=request.user, receiver=receiver, content=content)  # Создайте сообщение с указанием получателя
+            # Получаем или создаем чат между пользователями
+            chat, created = Chat.objects.get_or_create(user1=request.user, user2=receiver)
+            # Создайте сообщение с указанием чата
+            message = Message.objects.create(sender=request.user, receiver=receiver, content=content, chat=chat)
             return redirect('personal_chat', user=receiver_username)  # Перенаправление на личный чат
         else:
             return redirect('main')  # Если ни то, ни другое, перенаправляем на главную страницу
@@ -258,8 +262,42 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
 
 class GroupDeleteView(LoginRequiredMixin, DeleteView):
     model = Group
-    template_name = '../templates/chat/action/delete-group.html'
+    template_name = '../templates/chat/actions/delete-group.html'
     success_url = reverse_lazy('main')  # Перенаправление после успешного удаления
 
     def get_object(self, queryset=None):
         return get_object_or_404(Group, id=self.kwargs['pk'])  # Получаем группу по ID
+
+class ChatDeleteView(LoginRequiredMixin, DeleteView):
+    model = Chat
+    template_name = '../templates/chat/actions/delete-chat.html'  # Шаблон для подтверждения удаления
+    success_url = reverse_lazy('main')  # URL для перенаправления после успешного удаления
+
+    def get_object(self, queryset=None):
+        other_user_username = self.kwargs['user']
+        other_user = get_object_or_404(CustomUser , username=other_user_username)
+
+        # Ищем чат, где текущий пользователь является user1 или user2
+        chat = Chat.objects.filter(
+            Q(user1=self.request.user, user2=other_user) |
+            Q(user1=other_user, user2=self.request.user)
+        ).first()  # Получаем первый найденный чат или None
+
+        if chat is None:
+            raise Http404("Chat does not exist")  # Если чат не найден, выбрасываем 404
+
+        return chat
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['other_user'] = self.get_object().user2 if self.get_object().user1 == self.request.user else self.get_object().user1
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        chat = self.get_object()
+        # Удаляем все сообщения, связанные с чатом
+        messages = Message.objects.filter(chat=chat)
+        messages_count = messages.count()  # Считаем количество сообщений для отладки
+        messages.delete()  # Удаляем все сообщения, связанные с этим чатом
+        logger.info(f"Deleted {messages_count} messages from chat between {chat.user1.username} and {chat.user2.username}.")  # Логируем удаление
+        return super().delete(request, *args, **kwargs)  # Удаляем сам чат
