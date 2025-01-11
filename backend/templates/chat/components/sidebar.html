@@ -1,30 +1,75 @@
- <!-- Sidebar -->
-   <div class="w-1/4 bg-white border-r border-gray-200 hidden md:flex flex-col justify-between">
+<!-- Sidebar -->
+<div class="w-1/4 bg-white border-r border-gray-200 hidden md:flex flex-col justify-between">
     <div>
-     <div class="p-4 border-b border-gray-200">
-      <div class="flex items-center">
-       <img alt="User avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="https://storage.googleapis.com/a1aa/image/IhE5uy5NlI4uIpl0e3T5LAf9h0loNHPDYdWEfwpHFzQb3tDoA.jpg" width="50"/>
-       <div class="ml-3">
-        <h2 class="text-lg font-semibold">User Name</h2>
-        <button class="text-sm text-gray-500" onclick="window.location.href={% url 'edit_profile' %}">Профиль</button>
-       </div>
-      </div>
-     </div>
-
-     <div class="p-4">
-      <h3 class="text-lg font-semibold mb-2">Чаты</h3>
-      <ul>
-       <li class="mb-2">
-        <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-         <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/>
-         <span class="ml-3 text-gray-500">Сообщений нет</span>
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex items-center">
+                <img alt="User  avatar placeholder" class="w-10 h-10 rounded-full" height="50" src="{{ user.photo.url }}" width="50"/>
+                <div class="ml-3">
+                    <h2 class="text-lg font-semibold">{{ user.username }}</h2>
+                    <button class="text-sm text-gray-500" onclick="window.location.href='{% url 'edit_profile' %}'">Профиль</button>
+                </div>
+            </div>
         </div>
-       </li>
-      </ul>
-     </div>
+
+        <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Чаты</h3>
+            <ul id="chatList">
+                <li class="mb-2">
+                    <div class="flex items-center p-2 bg-gray-100 rounded-lg">
+                        <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/>
+                        <span class="ml-3 text-gray-500">Сообщений нет</span>
+                    </div>
+                </li>
+            </ul>
+            <div id="loading" class="hidden text-center">Загрузка...</div>
+            <div id="error" class="hidden text-red-500 text-center">Ошибка загрузки чатов.</div>
+        </div>
     </div>
 
     <div class="p-4">
-     <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUserListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Написать сообщение</button>
-     <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton" onclick="window.location.href='{% url 'create_group' %}'">Создать группу</button>
+        <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUser ListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Написать сообщение</button>
+        <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton" onclick="window.location.href='{% url 'create_group' %}'">Создать группу</button>
     </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const chatList = document.getElementById('chatList');
+    const loading = document.getElementById('loading');
+    const errorDiv = document.getElementById('error');
+
+    loading.classList.remove('hidden'); // Показать индикатор загрузки
+
+    fetch(`${window.location.origin}/api/chats/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            chatList.innerHTML = ''; // Очистите список перед добавлением новых элементов
+            loading.classList.add('hidden'); // Скрыть индикатор загрузки
+
+            if (data.length === 0) {
+                chatList.innerHTML = '<li class="mb-2"><span class="text-gray-500">Чатов нет</span></li>';
+            } else {
+                data.forEach(chat => {
+                    const li = document.createElement('li');
+                    li.className = 'mb-2';
+                    li.innerHTML = `
+                        <div class="flex items-center p-2 bg-gray-100 rounded-lg">
+                            <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.avatar_url || 'default_avatar_url.jpg'}" />
+                            <span class="ml-3 text-gray-500">${chat.last_message || 'Сообщений нет'}</span>
+                        </div>
+                    `;
+                    chatList.appendChild(li);
+                });
+            }
+        })
+        .catch(error => {
+            loading.classList.add('hidden'); // Скрыть индикатор загрузки
+            errorDiv.classList.remove('hidden'); // Показать сообщение об ошибке
+            console.error('Error fetching chats:', error);
+        });
+});
+</script>
