@@ -7,24 +7,24 @@
     <div class="flex-1 p-4 overflow-y-auto mb-40">
         <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
             <div class="flex items-center mb-4">
-                <img alt="User  avatar placeholder" class="w-16 h-16 rounded-full" height="64" src="{{ user.photo.url }}" width="64"/>
+                <img alt="User  avatar placeholder" class="w-16 h-16 rounded-full" height="64" src="{{ profile_user.photo.url }}" width="64"/>
                 <div class="ml-4">
-                    <h3 class="text-lg font-semibold">{{ user.username }}</h3>
-                    <p class="text-sm text-gray-500">{{ user.email }}</p>
+                    <h3 class="text-lg font-semibold">{{ profile_user.username }}</h3>
+                    <p class="text-sm text-gray-500">{{ profile_user.email }}</p>
                 </div>
             </div>
 
             <div class="mb-4">
                 <h4 class="text-md font-semibold mb-2">Описание</h4>
-                <p class="text-sm text-gray-700">{{ user.about }}</p>
+                <p class="text-sm text-gray-700">{{ profile_user.about }}</p>
             </div>
             <div class="mb-4">
                 <h4 class="text-md font-semibold mb-2">Контактная информация</h4>
-                <p class="text-sm text-gray-700">Номер: {{ user.phone_number }}</p>
+                <p class="text-sm text-gray-700">Номер: {{ profile_user.phone_number }}</p>
             </div>
 
             <div class="flex items-center justify-between">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' user.username %}'">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' profile_user.username %}'">
                     Написать сообщение
                 </button>
                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">

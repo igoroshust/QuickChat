@@ -58,8 +58,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     li.className = 'mb-2';
                     li.innerHTML = `
                         <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-                            <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.avatar_url || 'default_avatar_url.jpg'}" />
-                            <span class="ml-3 text-gray-500">${chat.last_message || 'Сообщений нет'}</span>
+                            <a href="/personal-chat/${chat.user2_username}/" class="flex items-center">
+                                <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.user2_avatar || 'default_avatar_url.jpg'}" />
+                                <span class="ml-3 text-gray-500">${chat.user2_username || 'Сообщений нет'}</span>
+                            </a>
                         </div>
                     `;
                     chatList.appendChild(li);

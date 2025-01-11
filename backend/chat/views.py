@@ -59,7 +59,10 @@ def user_list(request):
 @login_required
 def user_profile(request, user):
     user_object = get_object_or_404(CustomUser , username=user)
-    return render(request, '../templates/chat/user-profile.html', {'user': user_object})
+    return render(request, '../templates/chat/user-profile.html', {
+        'user': request.user,  # Передаем текущего пользователя
+        'profile_user': user_object  # Передаем пользователя профиля
+    })
 
 @login_required
 def create_group(request):
