@@ -1,8 +1,7 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from chat.models import Chat
-from .serializers import ChatSerializer
+from chat.models import Chat, Group
+from .serializers import ChatSerializer, GroupSerializer
 from django.db.models import Q
 
 class ChatViewSet(viewsets.ReadOnlyModelViewSet):
@@ -15,3 +14,12 @@ class ChatViewSet(viewsets.ReadOnlyModelViewSet):
         return self.queryset.filter(
             Q(user1=self.request.user) | Q(user2=self.request.user)
         )
+
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Фильтруем группы, в которых участвует текущий пользователь"""
+        return self.queryset.filter(members=self.request.user)

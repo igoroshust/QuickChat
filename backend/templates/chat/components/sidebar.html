@@ -15,14 +15,20 @@
             <h3 class="text-lg font-semibold mb-2">Чаты</h3>
             <ul id="chatList">
                 <li class="mb-2">
-                    <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-                        <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/>
-                        <span class="ml-3 text-gray-500">Сообщений нет</span>
-                    </div>
                 </li>
             </ul>
             <div id="loading" class="hidden text-center">Загрузка...</div>
             <div id="error" class="hidden text-red-500 text-center">Ошибка загрузки чатов.</div>
+        </div>
+
+        <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Группы</h3>
+            <ul id="groupList">
+                <li class="mb-2">
+                </li>
+            </ul>
+            <div id="loadingGroups" class="hidden text-center">Загрузка групп...</div>
+            <div id="errorGroups" class="hidden text-red-500 text-center">Ошибка загрузки групп.</div>
         </div>
     </div>
 
@@ -39,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     loading.classList.remove('hidden'); // Показать индикатор загрузки
 
+    // Загрузка чатов
     fetch(`${window.location.origin}/api/chats/`)
         .then(response => {
             if (!response.ok) {
@@ -51,16 +58,16 @@ document.addEventListener("DOMContentLoaded", function() {
             loading.classList.add('hidden'); // Скрыть индикатор загрузки
 
             if (data.length === 0) {
-                chatList.innerHTML = '<li class="mb-2"><span class="text-gray-500">Чатов нет</span></li>';
+                chatList.innerHTML = '<li class="mb-2"><div class="flex items-center p-2 bg-gray-100 rounded-lg"><img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/><span class="ml-3 text-gray-500">Сообщений нет</span></div></li>';
             } else {
                 data.forEach(chat => {
                     const li = document.createElement('li');
                     li.className = 'mb-2';
                     li.innerHTML = `
                         <a class="flex items-center p-2 bg-gray-100 rounded-lg" href="/personal-chat/${chat.user2_username}/">
-                                <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.user2_avatar || 'default_avatar_url.jpg'}" />
-                                <span class="ml-3 text-gray-500">${chat.user2_username || 'Сообщений нет'}</span>
-                            </a>
+                            <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.user2_avatar || 'default_avatar_url.jpg'}" />
+                            <span class="ml-3 text-gray-500">${chat.user2_username || 'Сообщений нет'}</span>
+                        </a>
                     `;
                     chatList.appendChild(li);
                 });
@@ -70,6 +77,47 @@ document.addEventListener("DOMContentLoaded", function() {
             loading.classList.add('hidden'); // Скрыть индикатор загрузки
             errorDiv.classList.remove('hidden'); // Показать сообщение об ошибке
             console.error('Error fetching chats:', error);
+        });
+
+    // Загрузка групп
+    const groupList = document.getElementById('groupList');
+    const loadingGroups = document.getElementById('loadingGroups');
+    const errorGroupsDiv = document.getElementById('errorGroups');
+
+    loadingGroups.classList.remove('hidden'); // Показать индикатор загрузки групп
+
+    fetch(`${window.location.origin}/api/groups/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Groups data:', data);  // Для отладки
+            groupList.innerHTML = ''; // Очистите список перед добавлением новых элементов
+            loadingGroups.classList.add('hidden'); // Скрыть индикатор загрузки групп
+
+            if (data.length === 0) {
+                groupList.innerHTML = '<li class="mb-2"><div class="flex items-center p-2 bg-gray-100 rounded-lg"><img alt="Group avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/vIklsEX1eOwUOqsLl9kWfEdCBmyAxwxgOUN0AeaeYWHsseOgC.jpg" width="40"/><span class="ml-3 text-gray-500">Групп нет</span></div></li>';
+            } else {
+                data.forEach(group => {
+                    const li = document.createElement('li');
+                    li.className = 'mb-2';
+                    li.innerHTML = `
+                        <a class="flex items-center p-2 bg-gray-100 rounded-lg" href="/group-chat/${group.id}/">
+                            <img alt="Group avatar" class="w-8 h-8 rounded-full" src="${group.group_image || 'default_group_avatar_url.jpg'}" />
+                            <span class="ml-3 text-gray-500">${group.group_name || 'Без названия'}</span>
+                        </a>
+                    `;
+                    groupList.appendChild(li);
+                });
+            }
+        })
+        .catch(error => {
+            loadingGroups.classList.add('hidden'); // Скрыть индикатор загрузки групп
+            errorGroupsDiv.classList.remove('hidden'); // Показать сообщение об ошибке
+            console.error('Error fetching groups:', error);
         });
 });
 </script>

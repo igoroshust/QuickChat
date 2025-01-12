@@ -20,7 +20,7 @@ class Chat(models.Model):
 
 class Message(models.Model):
     """Сообщение"""
-    chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
+    chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE, null=True)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_messages', on_delete=models.CASCADE)
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_messages', on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()

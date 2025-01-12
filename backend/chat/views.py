@@ -98,6 +98,10 @@ def group_chat_view(request, group_id):
         'group': group
     })
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Message, Chat, CustomUser , Group
+
 @login_required
 def send_message(request):
     if request.method == 'POST':
@@ -114,9 +118,15 @@ def send_message(request):
             receiver = get_object_or_404(CustomUser , username=receiver_username)
             # Получаем или создаем чат между пользователями
             chat, created = Chat.objects.get_or_create(user1=request.user, user2=receiver)
-            # Создайте сообщение с указанием чата
-            message = Message.objects.create(sender=request.user, receiver=receiver, content=content, chat=chat)
-            return redirect('personal_chat', user=receiver_username)  # Перенаправление на личный чат
+
+            # Проверяем, что чат был успешно получен или создан
+            if chat:
+                # Создайте сообщение с указанием чата
+                message = Message.objects.create(sender=request.user, receiver=receiver, content=content, chat=chat)
+                return redirect('personal_chat', user=receiver_username)  # Перенаправление на личный чат
+            else:
+                # Обработка случая, когда чат не был создан
+                return redirect('main')  # Или обработайте ошибку
         else:
             return redirect('main')  # Если ни то, ни другое, перенаправляем на главную страницу
 
