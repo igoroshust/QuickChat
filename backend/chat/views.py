@@ -229,14 +229,18 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
         group = form.save(commit=False)
         group.save()
 
+        # Добавляем создателя группы в участники
+        group.members.add(self.request.user)
+
         # Получаем участников из формы
         members = self.request.POST.get('members', '').split(',')
         for member in members:
             member = member.strip()
             try:
-                user = CustomUser .objects.get(username=member)
+                user = CustomUser.objects.get(username=member)
                 group.members.add(user)
-            except CustomUser .DoesNotExist:
+
+            except CustomUser.DoesNotExist:
                 form.add_error('members', f'Пользователь с именем "{member}" не найден.')
                 # Перенаправляем на страницу чата группы
 
