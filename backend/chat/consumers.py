@@ -67,8 +67,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 # Добавьте этот класс для обработки личных чатов
 class PersonalChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        from .models import CustomUser
         self.username = self.scope['url_route']['kwargs']['username']
-        self.room_group_name = f'personal_chat_{self.username}'
+        self.user = self.scope['user']
+
+        # Уникальное имя группы для каждого пользователя
+        self.room_group_name = f'personal_chat_{self.user.username}'
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -86,4 +90,45 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         print("Received personal message:", text_data)
-        # Логика обработки личных сообщений
+        try:
+            from .models import Message, CustomUser
+            text_data_json = json.loads(text_data)
+            message = text_data_json['message']
+            username = text_data_json['username']
+            avatar_url = text_data_json['avatar_url']
+
+            # Получаем пользователя, которому отправлено сообщение
+            receiver = await database_sync_to_async(CustomUser .objects.get)(username=self.username)
+
+            # Сохраняем личное сообщение в базе данных
+            await database_sync_to_async(Message.objects.create)(
+                sender=self.user,
+                receiver=receiver,  # Указываем получателя
+                content=message
+            )
+            print(f"Personal message saved: {message}")
+
+            # Отправляем сообщение в группу получателя
+            receiver_group_name = f'personal_chat_{receiver.username}'
+            await self.channel_layer.group_send(
+                receiver_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'username': username,
+                    'avatar_url': avatar_url
+                }
+            )
+        except Exception as e:
+            print(f"Error in receive: {e}")
+
+    async def chat_message(self, event):
+        message = event['message']
+        username = event['username']
+        avatar_url = event['avatar_url']
+
+        await self.send(text_data=json.dumps({
+            'message': message,
+            'username': username,
+            'avatar_url': avatar_url
+        }))

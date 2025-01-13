@@ -138,18 +138,21 @@ def send_message(request):
 
 @login_required
 def chat_view(request, user):
-    other_user = get_object_or_404(CustomUser, username=user)
+    other_user = get_object_or_404(CustomUser , username=user)
     messages = Message.objects.filter(
         (Q(sender=request.user) & Q(receiver=other_user)) |
         (Q(sender=other_user) & Q(receiver=request.user))
     ).order_by('timestamp')
 
+    group = 1
+
     return render(request, 'chat/chat.html', {
         'messages': messages,
         'other_user': other_user,
         'chat_type': 'personal',  # Указываем тип чата
-        'chat_avatar_url': other_user.photo,  # Замените на правильный URL аватара
-        'chat_title': other_user.username  # Имя пользователя
+        'chat_avatar_url': other_user.photo.url if other_user.photo else None,  # URL аватара
+        'chat_title': other_user.username,  # Имя пользователя
+        'group': group,
     })
 
 @login_required

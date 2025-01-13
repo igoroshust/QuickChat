@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="05504364-ef91-482e-93ef-a27c81512f3d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/backend/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/backend/asgi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/backend/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/chat/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/chat/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/consumers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/templates/chat/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/chat.html" afterDir="false" />
@@ -46,7 +44,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Igor/Layouts/Scan&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -64,6 +62,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="backend.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="Python 3.13 (QuickChat)" />

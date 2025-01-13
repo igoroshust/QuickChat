@@ -24,7 +24,12 @@
                 <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.photo.url }}" width="40"/>
             {% endif %}
             <div class="{% if message.sender == request.user %}mr-3 bg-blue-500 text-white{% else %}ml-3 bg-gray-100{% endif %} p-2 rounded-lg">
-                <p class="text-sm"><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+                <p class="text-sm">
+                    {% if message.sender != request.user %}
+                        <strong>{{ message.sender.username }}:</strong>
+                    {% endif %}
+                    {{ message.content }}
+                </p>
             </div>
             {% if message.sender == request.user %}
                 <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.photo.url }}" width="40"/>
@@ -145,7 +150,10 @@
 
             messageDiv.innerHTML += `
                 <div class="${username === '{{ request.user.username }}' ? 'mr-3 bg-blue-500 text-white' : 'ml-3 bg-gray-100'} p-2 rounded-lg">
-                    <p class="text-sm"><strong>${username}:</strong> ${message}</p>
+                    <p class="text-sm">
+                        ${username !== '{{ request.user.username }}' ? '<strong>' + username + ':</strong>' : ''}
+                        ${message}
+                    </p>
                 </div>
             `;
 
@@ -183,6 +191,23 @@
                 'avatar_url': '{{ request.user.photo.url }}'  // URL аватара
             }));
 
+            // Добавляем сообщение в чат сразу после отправки
+            const chatLog = document.getElementById('chat-log');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex mb-4 justify-end`; // Выравниваем сообщение вправо
+
+            messageDiv.innerHTML = `
+                <div class="mr-3 bg-blue-500 text-white p-2 rounded-lg">
+                    <p class="text-sm">
+                        <strong>${{ request.user.username }}:</strong>
+                        ${message}
+                    </p>
+                </div>
+                <img alt="User  avatar" class="w-8 h-8 rounded-full" height="40" src="{{ request.user.photo.url }}" width="40"/>
+            `;
+
+            chatLog.appendChild(messageDiv);
+            chatLog.scrollTop = chatLog.scrollHeight;  // Прокручиваем вниз
             messageInputDom.value = '';  // Очищаем поле ввода
         };
     });
