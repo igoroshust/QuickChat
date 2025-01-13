@@ -85,22 +85,26 @@ def create_group(request):
 
     return render(request, '../templates/chat/create-group.html')
 
+
 @login_required
 def group_chat_view(request, group_id):
+    # Получаем группу по ID, если группа не найдена, будет возвращена 404 ошибка
     group = get_object_or_404(Group, id=group_id)
+
+    # Отладочный вывод
+    print(f'Group ID: {group.id}')  # Проверяем, что ID группы загружается
+
+    # Получаем сообщения, связанные с этой группой, и сортируем их по времени
     messages = Message.objects.filter(group=group).order_by('timestamp')
 
+    # Возвращаем шаблон с необходимыми данными
     return render(request, 'chat/chat.html', {
-        'messages': messages,
-        'chat_title': group.name,
-        'chat_avatar_url': group.image if group.image else None,
-        'chat_type': 'group',
-        'group': group
+        'messages': messages,  # Сообщения для отображения
+        'chat_title': group.name,  # Название чата
+        'chat_avatar_url': group.image.url if group.image else None,  # URL аватара группы
+        'chat_type': 'group',  # Указываем, что это групповой чат
+        'group': group  # Передаем объект группы в контекст
     })
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Message, Chat, CustomUser , Group
 
 @login_required
 def send_message(request):

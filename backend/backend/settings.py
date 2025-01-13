@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'chat',
+    'channels',
     'api',
     'rest_framework',
     'corsheaders',
@@ -191,6 +192,19 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'INFO',
             'propagate': False,
+        },
+    },
+}
+
+# WebSockets
+ASGI_APPLICATION = 'backend.asgi.application'
+
+# Настройка канала
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],  # Убедитесь, что Redis запущен
         },
     },
 }

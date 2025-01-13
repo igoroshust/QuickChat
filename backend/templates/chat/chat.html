@@ -6,7 +6,7 @@
 <div class="flex-1 flex flex-col">
     <div class="flex items-center justify-between bg-white">
         <div class="flex items-center p-2 rounded-lg">
-            <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ chat_avatar_url.url }}" width="40"/>
+            <img alt="Chat avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ chat_avatar_url }}" width="40"/>
             <span class="ml-3 text-500">{{ chat_title }}</span> <!-- Имя пользователя или название группы -->
         </div>
         <button class="text-gray-500" id="optionsButton">
@@ -17,14 +17,14 @@
 {% endblock header %}
 
 {% block content %}
-<div class="flex-1 p-4 overflow-y-auto">
+<div class="flex-1 p-4 overflow-y-auto" id="chat-log">
     {% for message in messages %}
         <div class="flex mb-4 {% if message.sender == request.user %}justify-end{% endif %}">
             {% if message.sender != request.user %}
                 <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.photo.url }}" width="40"/>
             {% endif %}
             <div class="{% if message.sender == request.user %}mr-3 bg-blue-500 text-white{% else %}ml-3 bg-gray-100{% endif %} p-2 rounded-lg">
-                <p class="text-sm">{{ message.content }}</p>
+                <p class="text-sm"><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
             </div>
             {% if message.sender == request.user %}
                 <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="{{ message.sender.photo.url }}" width="40"/>
@@ -34,11 +34,10 @@
 </div>
 
 <div class="p-4 bg-white border-t border-gray-200">
-    <form method="post" action="{% url 'send_message' %}">
+    <form id="message-form">
         {% csrf_token %}
-        <input type="hidden" name="group_id" value="{{ group.id }}">  <!-- Убедитесь, что group.id передается -->
         <div class="flex items-center">
-            <input class="flex-1 p-2 border border-gray-300 rounded-lg" name="content" placeholder="Написать сообщение" type="text" required/>
+            <input class="flex-1 p-2 border border-gray-300 rounded-lg" id="message-input" placeholder="Написать сообщение" type="text" required/>
             {% if chat_type == 'personal' %}
                 <input type="hidden" name="receiver" value="{{ other_user.username }}"/> <!-- Скрытое поле для имени получателя -->
             {% endif %}
@@ -48,6 +47,7 @@
         </div>
     </form>
 </div>
+
 
 <!-- Options Modal -->
 <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden" id="optionsModal">
@@ -97,12 +97,94 @@
 </div>
 
 <script>
-    document.getElementById('optionsButton').addEventListener('click', function() {
-        document.getElementById('optionsModal').classList.remove('hidden');
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const chat_type = '{{ chat_type }}';  // Убедитесь, что эта строка присутствует
 
-    document.getElementById('closeModalButton').addEventListener('click', function() {
-        document.getElementById('optionsModal').classList.add('hidden');
+        document.getElementById('optionsButton').addEventListener('click', function() {
+            document.getElementById('optionsModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeModalButton').addEventListener('click', function() {
+            document.getElementById('optionsModal').classList.add('hidden');
+        });
+
+        // WebSocket код - создаём соединение
+        let chatSocket;
+        if (chat_type === 'group') {
+            chatSocket = new WebSocket(
+                'ws://' + window.location.host + '/ws/group-chat/{{ group.id }}/'  // Используйте 'wss://' для HTTPS
+            );
+        } else if (chat_type === 'personal') {
+            chatSocket = new WebSocket(
+                'ws://' + window.location.host + '/ws/personal-chat/{{ other_user.username }}/'  // Используйте 'wss://' для HTTPS
+            );
+        }
+
+        chatSocket.onopen = function(e) {
+            console.log('WebSocket connection established');  // Отладочный вывод
+        };
+
+        // Обработка входящих сообщений
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log('Message received:', data);  // Отладочный вывод
+            const message = data.message;
+            const username = data.username;
+            const avatarUrl = data.avatar_url;
+
+            // Добавляем новое сообщение в чат
+            const chatLog = document.getElementById('chat-log');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex mb-4 ${username === '{{ request.user.username }}' ? 'justify-end' : ''}`;
+
+            if (username !== '{{ request.user.username }}') {
+                messageDiv.innerHTML += `
+                    <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="${avatarUrl}" width="40"/>
+                `;
+            }
+
+            messageDiv.innerHTML += `
+                <div class="${username === '{{ request.user.username }}' ? 'mr-3 bg-blue-500 text-white' : 'ml-3 bg-gray-100'} p-2 rounded-lg">
+                    <p class="text-sm"><strong>${username}:</strong> ${message}</p>
+                </div>
+            `;
+
+            if (username === '{{ request.user.username }}') {
+                messageDiv.innerHTML += `
+                    <img alt="User  avatar placeholder" class="w-8 h-8 rounded-full" height="40" src="${avatarUrl}" width="40"/>
+                `;
+            }
+
+            chatLog.appendChild(messageDiv);
+            chatLog.scrollTop = chatLog.scrollHeight;  // Прокручиваем вниз
+        };
+
+        // Обработка закрытия соединения
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        // Обработка ошибок
+        chatSocket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+        };
+
+        // Отправка сообщения
+        document.getElementById('message-form').onsubmit = function(e) {
+            e.preventDefault();  // Предотвращаем отправку формы
+
+            const messageInputDom = document.getElementById('message-input');
+            const message = messageInputDom.value;
+
+            console.log('Sending message:', message);  // Отладочный вывод
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': '{{ request.user.username }}',  // Имя пользователя
+                'avatar_url': '{{ request.user.photo.url }}'  // URL аватара
+            }));
+
+            messageInputDom.value = '';  // Очищаем поле ввода
+        };
     });
 </script>
 

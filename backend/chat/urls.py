@@ -24,5 +24,5 @@ urlpatterns = [
     path('update-group/', update_group, name="update_group"),
     path('delete-group/', delete_group, name="delete_group"),
     path('sidebar/', sidebar, name="sidebar"),
-    path('send_message/', send_message, name='send_message'),
+    # path('send_message/', send_message, name='send_message'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
