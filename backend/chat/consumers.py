@@ -67,7 +67,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 # Добавьте этот класс для обработки личных чатов
 class PersonalChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        from .models import CustomUser
+        from .models import CustomUser, Chat, Message
         self.username = self.scope['url_route']['kwargs']['username']
         self.user = self.scope['user']
 

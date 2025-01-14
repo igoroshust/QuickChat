@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return response.json();
         })
         .then(data => {
+            console.log('Chat data:', data);  // Для отладки
             chatList.innerHTML = ''; // Очистите список перед добавлением новых элементов
             loading.classList.add('hidden'); // Скрыть индикатор загрузки
 
@@ -64,9 +65,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     const li = document.createElement('li');
                     li.className = 'mb-2';
                     li.innerHTML = `
-                        <a class="flex items-center p-2 bg-gray-100 rounded-lg" href="/personal-chat/${chat.user2_username}/">
-                            <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.user2_avatar || 'default_avatar_url.jpg'}" />
-                            <span class="ml-3 text-gray-500">${chat.user2_username || 'Сообщений нет'}</span>
+                        <a class="flex items-center p-2 bg-gray-100 rounded-lg" href="/personal-chat/${chat.user_username}/">
+                            <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.user_avatar || 'default_avatar_url.jpg'}" />
+                            <span class="ml-3 text-gray-500">${chat.user_username || 'Сообщений нет'}</span> <!-- Используйте user_username -->
                         </a>
                     `;
                     chatList.appendChild(li);
