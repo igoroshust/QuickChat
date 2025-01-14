@@ -19,3 +19,8 @@
 | igor        | myS3cr3tP@ssw0rd! | 
 | andrei      | myS3cr3tP@ssw0rd! | 
 | veronika    | myS3cr3tP@ssw0rd! | 
+
+
+### Ключевые маршруты
+- http://127.0.0.1:8000/ - авторизация/регистрация
+- http://127.0.0.1:8000/main/ - главная страница
