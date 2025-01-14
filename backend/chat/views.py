@@ -89,22 +89,24 @@ def create_group(request):
 
 @login_required
 def group_chat_view(request, group_id):
-    # Получаем группу по ID, если группа не найдена, будет возвращена 404 ошибка
     group = get_object_or_404(Group, id=group_id)
 
-    # Отладочный вывод
-    print(f'Group ID: {group.id}')  # Проверяем, что ID группы загружается
+    # Обновляем статус всех непрочитанных сообщений для текущего пользователя
+    Message.objects.filter(group=group, is_read=False).exclude(sender=request.user).update(is_read=True)
 
     # Получаем сообщения, связанные с этой группой, и сортируем их по времени
     messages = Message.objects.filter(group=group).order_by('timestamp')
 
-    # Возвращаем шаблон с необходимыми данными
+    # Подсчитываем количество непрочитанных сообщений для текущего пользователя в этой группе
+    unread_count = Message.objects.filter(group=group, is_read=False).exclude(sender=request.user).count()
+
     return render(request, 'chat/chat.html', {
-        'messages': messages,  # Сообщения для отображения
-        'chat_title': group.name,  # Название чата
-        'chat_avatar_url': group.image.url if group.image else None,  # URL аватара группы
-        'chat_type': 'group',  # Указываем, что это групповой чат
-        'group': group  # Передаем объект группы в контекст
+        'messages': messages,
+        'chat_title': group.name,
+        'chat_avatar_url': group.image.url if group.image else None,
+        'chat_type': 'group',
+        'group': group,
+        'unread_count': unread_count
     })
 
 @login_required

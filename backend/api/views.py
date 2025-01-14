@@ -22,6 +22,7 @@ class ChatViewSet(viewsets.ReadOnlyModelViewSet):
         return context
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
+    """Представление для предоставления списка групп"""
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAuthenticated]
@@ -29,3 +30,8 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         """Фильтруем группы, в которых участвует текущий пользователь"""
         return self.queryset.filter(members=self.request.user)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request # Передаём текущий запрос в контекст
+        return context

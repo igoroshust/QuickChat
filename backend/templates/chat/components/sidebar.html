@@ -33,7 +33,7 @@
     </div>
 
     <div class="p-4">
-        <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUser ListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Написать сообщение</button>
+        <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg mb-4" id="viewUser  ListButton" style="margin-bottom: 10px" onclick="window.location.href='{% url 'user_list' %}'">Написать сообщение</button>
         <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg" id="createGroupChatButton" onclick="window.location.href='{% url 'create_group' %}'">Создать группу</button>
     </div>
 
@@ -113,9 +113,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     const li = document.createElement('li');
                     li.className = 'mb-2';
                     li.innerHTML = `
-                        <a class="flex items-center p-2 bg-gray-100 rounded-lg" href="/group-chat/${group.id}/">
-                            <img alt="Group avatar" class="w-8 h-8 rounded-full" src="${group.group_image || 'default_group_avatar_url.jpg'}" />
-                            <span class="ml-3 text-gray-500">${group.group_name || 'Без названия'}</span>
+                        <a class="flex items-center justify-between p-2 bg-gray-100 rounded-lg" href="/group-chat/${group.id}/">
+                            <div class="flex items-center">
+                                <img alt="Group avatar" class="w-8 h-8 rounded-full" src="${group.group_image || 'default_group_avatar_url.jpg'}" />
+                                <span class="ml-3 text-gray-500">${group.group_name || 'Без названия'}</span>
+                            </div>
+                            ${group.unread_count > 0 ? `
+                                <span class="flex items-center justify-center bg-blue-500 text-white rounded-full w-5 h-5 ml-2 text-xs">
+                                    ${group.unread_count}
+                                </span>
+                            ` : ''}
                         </a>
                     `;
                     groupList.appendChild(li);

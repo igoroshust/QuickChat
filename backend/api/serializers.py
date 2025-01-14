@@ -19,7 +19,13 @@ class ChatSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     group_name = serializers.CharField(source='name', read_only=True)
     group_image = serializers.ImageField(source='image', read_only=True)
+    unread_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ['id', 'group_name', 'group_image', 'members', 'created_at']
+        fields = ['id', 'group_name', 'group_image', 'members', 'created_at', 'unread_count']
+
+    def get_unread_count(self, obj):
+        user = self.context['request'].user  # Получаем текущего пользователя
+        # Подсчитываем непрочитанные сообщения для всех участников группы, кроме отправителя
+        return Message.objects.filter(group=obj, is_read=False).exclude(sender=user).count()
