@@ -15,20 +15,20 @@
             </div>
 
             <div class="mb-4">
-                <h4 class="text-md font-semibold mb-2">Описание</h4>
+                <h4 class="text-md font-semibold mb-2">О пользователе</h4>
                 <p class="text-sm text-gray-700">{{ profile_user.about }}</p>
             </div>
-            <div class="mb-4">
-                <h4 class="text-md font-semibold mb-2">Контактная информация</h4>
-                <p class="text-sm text-gray-700">Номер: {{ profile_user.phone_number }}</p>
-            </div>
+<!--            <div class="mb-4">-->
+<!--                <h4 class="text-md font-semibold mb-2">Контактная информация</h4>-->
+<!--                <p class="text-sm text-gray-700">Номер: {{ profile_user.phone_number }}</p>-->
+<!--            </div>-->
 
             <div class="flex items-center justify-between">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.location.href='{% url 'personal_chat' profile_user.username %}'">
                     Написать сообщение
                 </button>
-                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                    Заблокировать
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.history.back();">
+                    Вернуться назад
                 </button>
             </div>
         </div>

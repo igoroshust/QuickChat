@@ -59,11 +59,11 @@
         <h3 class="text-lg font-semibold mb-4">Действия</h3>
         <ul>
             {% if chat_type == 'personal' %}
-                <li class="mb-2">
-                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg">
-                        Заблокировать пользователя
-                    </button>
-                </li>
+<!--                <li class="mb-2">-->
+<!--                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg">-->
+<!--                        Заблокировать пользователя-->
+<!--                    </button>-->
+<!--                </li>-->
                 <li class="mb-2">
                     <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg" onclick="window.location.href='{% url 'delete_chat' other_user.username %}'">
                         Удалить чат
@@ -85,11 +85,11 @@
                         Удалить группу
                     </button>
                 </li>
-                <li class="mb-2">
-                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg">
-                        Выйти из группы
-                    </button>
-                </li>
+<!--                <li class="mb-2">-->
+<!--                    <button class="w-full text-left p-2 hover:bg-gray-100 rounded-lg">-->
+<!--                        Выйти из группы-->
+<!--                    </button>-->
+<!--                </li>-->
             {% endif %}
         </ul>
         <div class="flex justify-end mt-4">
