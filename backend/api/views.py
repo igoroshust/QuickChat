@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from chat.models import Chat, Group
 from .serializers import ChatSerializer, GroupSerializer
 from django.db.models import Q
+from django.http import Http404
 
 class ChatViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Chat.objects.all()

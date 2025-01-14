@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CustomSignupForm, UserProfileForm, GroupForm
 from .models import CustomUser, Message, Group, Chat
 from django.db.models import Q
+from django.http import Http404
 
 logger = logging.getLogger(__name__)
 
@@ -138,13 +139,13 @@ def send_message(request):
 
 @login_required
 def chat_view(request, user):
-    other_user = get_object_or_404(CustomUser , username=user)
+    other_user = get_object_or_404(CustomUser, username=user)
     messages = Message.objects.filter(
         (Q(sender=request.user) & Q(receiver=other_user)) |
         (Q(sender=other_user) & Q(receiver=request.user))
     ).order_by('timestamp')
 
-    group = 1
+    # group = 1
 
     return render(request, 'chat/chat.html', {
         'messages': messages,
@@ -152,7 +153,7 @@ def chat_view(request, user):
         'chat_type': 'personal',  # Указываем тип чата
         'chat_avatar_url': other_user.photo.url if other_user.photo else None,  # URL аватара
         'chat_title': other_user.username,  # Имя пользователя
-        'group': group,
+        # 'group': group,
     })
 
 @login_required

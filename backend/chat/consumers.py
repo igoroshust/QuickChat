@@ -91,20 +91,35 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         print("Received personal message:", text_data)
         try:
-            from .models import Message, CustomUser
+            from .models import Message, CustomUser, Chat
             text_data_json = json.loads(text_data)
             message = text_data_json['message']
             username = text_data_json['username']
             avatar_url = text_data_json['avatar_url']
 
             # Получаем пользователя, которому отправлено сообщение
-            receiver = await database_sync_to_async(CustomUser .objects.get)(username=self.username)
+            receiver = await database_sync_to_async(CustomUser.objects.get)(username=self.username)
+
+            # Убедитесь, что порядок пользователей правильный
+            if self.user.username < receiver.username:
+                user1 = self.user
+                user2 = receiver
+            else:
+                user1 = receiver
+                user2 = self.user
+
+            # Получаем или создаем чат между пользователями
+            chat, created = await database_sync_to_async(Chat.objects.get_or_create)(
+                user1=user1,
+                user2=user2
+            )
 
             # Сохраняем личное сообщение в базе данных
             await database_sync_to_async(Message.objects.create)(
                 sender=self.user,
                 receiver=receiver,  # Указываем получателя
-                content=message
+                content=message,
+                chat=chat,
             )
             print(f"Personal message saved: {message}")
 
