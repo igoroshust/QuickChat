@@ -65,9 +65,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     const li = document.createElement('li');
                     li.className = 'mb-2';
                     li.innerHTML = `
-                        <a class="flex items-center p-2 bg-gray-100 rounded-lg" href="/personal-chat/${chat.user_username}/">
-                            <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.user_avatar || 'default_avatar_url.jpg'}" />
-                            <span class="ml-3 text-gray-500">${chat.user_username || 'Сообщений нет'}</span> <!-- Используйте user_username -->
+                        <a class="flex items-center justify-between p-2 bg-gray-100 rounded-lg" href="/personal-chat/${chat.user_username}/">
+                            <div class="flex items-center">
+                                <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chat.user_avatar || 'default_avatar_url.jpg'}" />
+                                <span class="ml-3 text-gray-500">${chat.user_username || 'Сообщений нет'}</span>
+                            </div>
+                            ${chat.unread_count > 0 ? `
+                                <span class="flex items-center justify-center bg-blue-500 text-white rounded-full w-5 h-5 ml-2 text-xs">
+                                    ${chat.unread_count}
+                                </span>
+                            ` : ''}
                         </a>
                     `;
                     chatList.appendChild(li);

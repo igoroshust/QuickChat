@@ -139,13 +139,19 @@ def send_message(request):
 
 @login_required
 def chat_view(request, user):
-    other_user = get_object_or_404(CustomUser, username=user)
+    other_user = get_object_or_404(CustomUser , username=user)
+
+    # Обновляем статус всех непрочитанных сообщений
+    Message.objects.filter(receiver=request.user, sender=other_user, is_read=False).update(is_read=True)
+
+    # Получаем все сообщения между текущим пользователем и другим пользователем
     messages = Message.objects.filter(
         (Q(sender=request.user) & Q(receiver=other_user)) |
         (Q(sender=other_user) & Q(receiver=request.user))
     ).order_by('timestamp')
 
-    # group = 1
+    # Получаем количество непрочитанных сообщений для отображения (если нужно)
+    unread_count = Message.objects.filter(receiver=request.user, sender=other_user, is_read=False).count()
 
     return render(request, 'chat/chat.html', {
         'messages': messages,
@@ -153,7 +159,7 @@ def chat_view(request, user):
         'chat_type': 'personal',  # Указываем тип чата
         'chat_avatar_url': other_user.photo.url if other_user.photo else None,  # URL аватара
         'chat_title': other_user.username,  # Имя пользователя
-        # 'group': group,
+        'unread_count': unread_count,  # Количество непрочитанных сообщений
     })
 
 @login_required

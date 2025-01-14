@@ -16,6 +16,11 @@ class ChatViewSet(viewsets.ReadOnlyModelViewSet):
             Q(user1=self.request.user) | Q(user2=self.request.user)
         )
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
