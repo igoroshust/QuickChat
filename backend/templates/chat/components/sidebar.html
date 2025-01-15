@@ -14,8 +14,7 @@
         <div class="p-4">
             <h3 class="text-lg font-semibold mb-2">Чаты</h3>
             <ul id="chatList">
-                <li class="mb-2">
-                </li>
+                <li class="mb-2"></li>
             </ul>
             <div id="loading" class="hidden text-center">Загрузка...</div>
             <div id="error" class="hidden text-red-500 text-center">Ошибка загрузки чатов.</div>
@@ -24,8 +23,7 @@
         <div class="p-4">
             <h3 class="text-lg font-semibold mb-2">Группы</h3>
             <ul id="groupList">
-                <li class="mb-2">
-                </li>
+                <li class="mb-2"></li>
             </ul>
             <div id="loadingGroups" class="hidden text-center">Загрузка групп...</div>
             <div id="errorGroups" class="hidden text-red-500 text-center">Ошибка загрузки групп.</div>
@@ -80,8 +78,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     chatList.appendChild(li);
 
                     // Подключение к WebSocket для каждого чата
+                    console.log('Подключение к WebSocket для чата с ID:', chat.user_username); // отладка
                     const chatSocket = new WebSocket(
-                        'ws://' + window.location.host + '/ws/api/chat/' + chat.id + '/'
+                        'ws://' + window.location.host + '/ws/api/personal-chat/' + chat.user_username + '/'
                     );
 
                     chatSocket.onopen = function() {
@@ -97,14 +96,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         console.log('Message received:', data); // Отладка
 
                         switch (data.type) {
-                            case 'update_chats':
-                                updateChatList(data.chats);
-                                break;
                             case 'new_message':
-                                displayNewMessage(data.message);
+                                displayNewMessage(data);
                                 break;
-                            case 'update_groups':
-                                updateGroupList(data.groups);
+                            case 'chat_deleted':
+                                removeChat(data.chat_id);
                                 break;
                             // Обработка других типов сообщений
                         }
@@ -157,6 +153,32 @@ document.addEventListener("DOMContentLoaded", function() {
                         </a>
                     `;
                     groupList.appendChild(li);
+
+                    // Подключение к WebSocket для каждой группы
+                    console.log('Подключение к WebSocket для группы с ID:', group.id); // отладка
+                    const groupSocket = new WebSocket(
+                        'ws://' + window.location.host + '/ws/api/group-chat/' + group.id + '/'
+                    );
+
+                    groupSocket.onopen = function() {
+                        console.log('WebSocket-соединение установлено для группы (sidebar)');
+                    };
+
+                    groupSocket.onerror = function(error) {
+                        console.error('WebSocket ошибка для группы:', error);
+                    };
+
+                    groupSocket.onmessage = function(e) {
+                        const data = JSON.parse(e.data);
+                        console.log('Message received from group:', data); // Отладка
+
+                        switch (data.type) {
+                            case 'group_message':
+                                displayGroupMessage(data);
+                                break;
+                            // Обработка других типов сообщений
+                        }
+                    };
                 });
             }
         })
@@ -167,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
     function updateChatList(chats) {
+        console.log('Обновление списка чатов:', chats); // отладка
         chatList.innerHTML = ''; // Очистите список перед добавлением новых элементов
 
         chats.forEach(chat => {
@@ -191,9 +214,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateGroupList(groups) {
         const groupList = document.getElementById('groupList');
-        groupList.innerHTML = ''; // Очистите список перед добавлением новых элементов
+        groupList.innerHTML = ''; // Очистите список
 
-        groups.forEach(group => {
+    groups.forEach(group => {
             const li = document.createElement('li');
             li.className = 'mb-2';
             li.innerHTML = `
@@ -237,6 +260,40 @@ document.addEventListener("DOMContentLoaded", function() {
                 <span class="message-content">${message}</span>
             `;
             messageList.appendChild(newMessageElement);
+        }
+    }
+
+    function displayGroupMessage(messageData) {
+        const groupId = messageData.group_id; // Предполагается, что вы передаете group_id
+        const message = messageData.message;
+        const username = messageData.username;
+        const avatarUrl = messageData.avatar_url;
+
+        // Поиск элемента группы, куда нужно добавить новое сообщение
+        const groupElement = document.querySelector(`a[href="/group-chat/${groupId}/"]`);
+        if (groupElement) {
+            // Увеличьте счетчик непрочитанных сообщений
+            const unreadCountElement = groupElement.querySelector('.unread-count'); // Предполагается, что у вас есть элемент для отображения количества
+            let currentCount = parseInt(unreadCountElement.textContent) || 0;
+            unreadCountElement.textContent = currentCount + 1; // Увеличиваем счетчик
+
+            // Добавьте новое сообщение в соответствующий групповой чат
+            const messageList = groupElement.querySelector('.message-list'); // Предполагается, что у вас есть элемент для списка сообщений
+            const newMessageElement = document.createElement('div');
+            newMessageElement.className = 'message';
+            newMessageElement.innerHTML = `
+                <img src="${avatarUrl}" alt="${username}'s avatar" class="avatar" />
+                <span class="username">${username}:</span>
+                <span class="message-content">${message}</span>
+            `;
+            messageList.appendChild(newMessageElement);
+        }
+    }
+
+    function removeChat(chatId) {
+        const chatElement = document.querySelector(`a[href="/personal-chat/${chatId}/"]`);
+        if (chatElement) {
+            chatElement.parentElement.remove(); // Удаляем элемент из DOM
         }
     }
 });
