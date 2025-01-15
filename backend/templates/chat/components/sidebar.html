@@ -44,10 +44,10 @@ document.addEventListener("DOMContentLoaded", function() {
     loading.classList.remove('hidden'); // Показать индикатор загрузки
 
     // Загрузка чатов
-    fetch(`${window.location.origin}/api/chats/`)
+    fetch(`${window.location.origin}/api/chats/`) // personal-chat
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Сетевой запрос не выполнен');
             }
             return response.json();
         })
@@ -78,9 +78,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     chatList.appendChild(li);
 
                     // Подключение к WebSocket для каждого чата
-                    console.log('Подключение к WebSocket для чата с ID:', chat.user_username); // отладка
+                    console.log('Подключение к WebSocket для чата с:', chat.user_username); // отладка
                     const chatSocket = new WebSocket(
-                        'ws://' + window.location.host + '/ws/api/personal-chat/' + chat.user_username + '/'
+                        'ws://' + window.location.host + '/ws/api/chats/' + chat.user_username + '/'
                     );
 
                     chatSocket.onopen = function() {
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     chatSocket.onmessage = function(e) {
                         const data = JSON.parse(e.data);
-                        console.log('Message received:', data); // Отладка
+                        console.log('Получено сообщение:', data); // Отладка
 
                         switch (data.type) {
                             case 'new_message':
@@ -121,10 +121,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     loadingGroups.classList.remove('hidden'); // Показать индикатор загрузки групп
 
-    fetch(`${window.location.origin}/api/groups/`)
+    fetch(`${window.location.origin}/api/groups/`) // group-chat
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Сетевой запрос не выполнен');
             }
             return response.json();
         })
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Подключение к WebSocket для каждой группы
                     console.log('Подключение к WebSocket для группы с ID:', group.id); // отладка
                     const groupSocket = new WebSocket(
-                        'ws://' + window.location.host + '/ws/api/group-chat/' + group.id + '/'
+                        'ws://' + window.location.host + '/ws/api/groups/' + group.id + '/'
                     );
 
                     groupSocket.onopen = function() {
@@ -165,12 +165,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     };
 
                     groupSocket.onerror = function(error) {
-                        console.error('WebSocket ошибка для группы:', error);
+                        console.error('WebSocket ошибка для группы с ID:', error);
                     };
 
                     groupSocket.onmessage = function(e) {
                         const data = JSON.parse(e.data);
-                        console.log('Message received from group:', data); // Отладка
+                        console.log('Получено сообщение из группы с ID:', data); // Отладка
 
                         switch (data.type) {
                             case 'group_message':

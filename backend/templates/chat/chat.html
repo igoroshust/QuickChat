@@ -131,7 +131,7 @@
         // Обработка входящих сообщений
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            console.log('Message received:', data);  // Отладочный вывод
+            console.log('Получено сообщение:', data);  // Отладочный вывод
             const message = data.message;
             const username = data.username;
             const avatarUrl = data.avatar_url;
@@ -168,12 +168,12 @@
 
         // Обработка закрытия соединения
         chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
+            console.error('WebSocket-соединение закрыто');
         };
 
         // Обработка ошибок
         chatSocket.onerror = function(e) {
-            console.error('WebSocket error:', e);
+            console.error('WebSocket ошибка:', e);
         };
 
         // Отправка сообщения
@@ -183,7 +183,7 @@
             const messageInputDom = document.getElementById('message-input');
             const message = messageInputDom.value;
 
-            console.log('Sending message:', message);  // Отладочный вывод
+            console.log('Отправлено сообщение:', message);  // Отладочный вывод
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': '{{ request.user.username }}',  // Имя пользователя
