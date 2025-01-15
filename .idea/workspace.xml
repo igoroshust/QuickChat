@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="05504364-ef91-482e-93ef-a27c81512f3d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/routing.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/routing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/backend/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/chat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/components/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/components/sidebar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,20 +39,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.QuickChat.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Igor/Layouts/Scan&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.QuickChat.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Python313/projects/QuickChat/backend/chat/static/chat/images",
+    "settings.editor.selected.configurable": "terminal"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Python313\projects\QuickChat\backend\chat\static\chat\images" />
+      <recent name="C:\Python313\projects\QuickChat\backend\templates\static" />
+      <recent name="C:\Python313\projects\QuickChat\backend\templates\chat" />
+      <recent name="C:\Python313\projects\QuickChat\backend\static\images" />
+      <recent name="C:\Python313\projects\QuickChat\backend\media\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Python313\projects\QuickChat\backend\chat\static\chat\images" />
+      <recent name="C:\Python313\projects\QuickChat\backend\static\images" />
       <recent name="C:\Python313\projects\QuickChat\backend\media\images" />
       <recent name="C:\Python313\projects\QuickChat\backend\templates" />
       <recent name="C:\Python313\projects\QuickChat" />
