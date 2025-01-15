@@ -116,16 +116,16 @@
         let chatSocket;
         if (chat_type === 'group') {
             chatSocket = new WebSocket(
-                'ws://' + window.location.host + '/ws/group-chat/{{ group.id }}/'  // Используйте 'wss://' для HTTPS
+                'ws://' + window.location.host + '/ws/group-chat/{{ group.id }}/'
             );
         } else if (chat_type === 'personal') {
             chatSocket = new WebSocket(
-                'ws://' + window.location.host + '/ws/personal-chat/{{ other_user.username }}/'  // Используйте 'wss://' для HTTPS
+                'ws://' + window.location.host + '/ws/personal-chat/{{ other_user.username }}/'
             );
         }
 
         chatSocket.onopen = function(e) {
-            console.log('WebSocket connection established');  // Отладочный вывод
+            console.log('WebSocket-соединение установлено (chat)');  // Отладочный вывод
         };
 
         // Обработка входящих сообщений

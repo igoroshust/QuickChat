@@ -38,7 +38,8 @@ class SideBarConsumer(AsyncWebsocketConsumer):
         if data['action'] == 'send_message':
             # Создание нового чата, если его еще нет
             chat, created = await database_sync_to_async(Chat.objects.get_or_create)(
-                user2=data['user2_id']
+                user1=self.scope['user'],
+                user2=data['user2_id'],
             )
             # Создание нового сообщения
             message = await database_sync_to_async(Message.objects.create)(
@@ -62,6 +63,8 @@ class SideBarConsumer(AsyncWebsocketConsumer):
             'message': message.content,
             'username': message.sender.username,
             'avatar_url': message.sender.avatar.url,
+            'user2_username': message.chat.user2.username,  # Добавляем имя собеседника
+            'user2_avatar': message.chat.user2.photo.url,  # Добавляем аватар собеседника
         }
         # Отправка сообщения в группу
         await self.channel_layer.group_send(

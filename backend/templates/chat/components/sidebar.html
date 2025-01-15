@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", function() {
             return response.json();
         })
         .then(data => {
-            console.log('Chat data:', data);  // Для отладки
-            chatList.innerHTML = ''; // Очистите список перед добавлением новых элементов
+            console.log('Личная переписка:', data);  // Для отладки
+            chatList.innerHTML = ''; // Очищаем список перед добавлением новых элементов
             loading.classList.add('hidden'); // Скрыть индикатор загрузки
 
             if (data.length === 0) {
@@ -85,11 +85,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     );
 
                     chatSocket.onopen = function() {
-                        console.log('WebSocket connection established');
+                        console.log('WebSocket-соединение установлено (sidebar)');
                     };
 
                     chatSocket.onerror = function(error) {
-                        console.error('WebSocket error:', error);
+                        console.error('WebSocket ошибка:', error);
                     };
 
                     chatSocket.onmessage = function(e) {
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return response.json();
         })
         .then(data => {
-            console.log('Groups data:', data);  // Для отладки
+            console.log('Группа:', data);  // Для отладки
             groupList.innerHTML = ''; // Очистите список перед добавлением новых элементов
             loadingGroups.classList.add('hidden'); // Скрыть индикатор загрузки групп
 
@@ -219,8 +219,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const username = messageData.username;
         const avatarUrl = messageData.avatar_url;
 
-        // Найдите элемент чата, куда нужно добавить новое сообщение
-        const chatElement = document.querySelector(`a[href="/personal-chat/${chatId}/"]`);
+        // Поиск элемента чата, куда нужно добавить новое сообщение
+        const chatElement = document.querySelector(`a[href="/personal-chat/${messageData.user2_username}/"]`);
         if (chatElement) {
             // Увеличьте счетчик непрочитанных сообщений
             const unreadCountElement = chatElement.querySelector('.unread-count'); // Предполагается, что у вас есть элемент для отображения количества

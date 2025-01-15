@@ -17,6 +17,21 @@ class ChatSerializer(serializers.ModelSerializer):
         # Считаем непрочитанные сообщения для него
         return Message.objects.filter(chat=obj, receiver=user, is_read=False).count()
 
+    def to_representation(self, instance):
+        """Переопределяем метод для возврата правильного собеседника"""
+        representation = super().to_representation(instance)
+        user = self.context['request'].user
+
+        # Если текущий пользователь - user1, то показываем user2
+        if instance.user1 == user:
+            representation['user_avatar'] = instance.user2.photo.url if instance.user2.photo else None
+            representation['user_username'] = instance.user2.username
+        else:
+            representation['user_avatar'] = instance.user1.photo.url if instance.user1.photo else None
+            representation['user_username'] = instance.user1.username
+
+        return representation
+
 class GroupSerializer(serializers.ModelSerializer):
     """Сериализатор Группы"""
     group_name = serializers.CharField(source='name', read_only=True)
