@@ -1,33 +1,36 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
-import json
 from channels.db import database_sync_to_async
 from django.db.models import Q
+import json
 
-class ChatConsumer(AsyncWebsocketConsumer):
+class SideBarConsumer(AsyncWebsocketConsumer):
+    """Сайдбар - потребитель WS-соединения"""
     async def connect(self):
-        # Логика подключения
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'chat_{self.room_name}'
+        """Установка соединения между клиентом и сервером"""
+        self.room_name = self.scope['url_route']['kwargs']['room_name'] # получение имени комнаты
+        self.room_group_name = f'chat_{self.room_name}' # группировка клиентов (отправление сообщений всем участникам сразу)
 
-        # Подключение к группе
+        # Подключение к группе (добавление текущего канала в группу соответствующей комнаты)
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
 
+        # Принятие соединения (сервер принимает WS-соединения, после этого клиент может начать обмен с сервером)
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Логика отключения
+        """Отключение"""
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
-        )
+        ) # удаление текущего канала из группы
 
     async def receive(self, text_data):
-        data = json.loads(text_data)
+        """Сервер получает соообщение от клиента через WS"""
+        data = json.loads(text_data) # текстовые данные, отправленные клиентом
 
-        # Импортируем модели и сериализаторы здесь
+        # Импортируем модели и сериализаторы здесь для избежания ошибки App loaded Yet.
         from chat.models import Chat, Group, Message
         from .serializers import ChatSerializer, GroupSerializer
 
@@ -53,12 +56,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send_group_update(group_data)
 
     async def send_message_update(self, message):
+        """Отправка сообщений всем участникам"""
         message_data = {
-            'chat_id': message.chat.id,  # Убедитесь, что вы передаете chat_id
+            'chat_id': message.chat.id,
             'message': message.content,
             'username': message.sender.username,
-            'avatar_url': message.sender.avatar.url,  # Предполагается, что у вас есть поле avatar
+            'avatar_url': message.sender.avatar.url,
         }
+        # Отправка сообщения в группу
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -68,6 +73,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def send_chat_update(self, chat_data):
+        """Отправка обновлений о чате всем участникам группы"""
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -76,8 +82,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-        # Отправляем обновлённый список чатов
+        # Получение обновлённого списока чатов из БД
         updated_chats = await self.get_updated_chats()
+
+        # Отправка обновлённого списка чатов
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -87,6 +95,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def send_group_update(self, group_data):
+        """Отправка обновлений о группе всем участникам группы"""
         await self.channel_layer.group_send(
             'group_group',  # Название группы, в которую отправляем
             {
@@ -95,8 +104,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-        # Отправляем обновлённый список групп
+        # Получаем обновлённый список групп из БД
         updated_groups = await self.get_updated_groups()
+
+        # Отправляем обновлённый список групп
         await self.channel_layer.group_send(
             'group_group',
             {
@@ -107,7 +118,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_updated_chats(self):
-        # Импортируем модели и сериализаторы здесь
+        """Получение обновлённых чатов"""
         from chat.models import Chat
         from .serializers import ChatSerializer
 
@@ -118,7 +129,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_updated_groups(self):
-        # Импортируем модели и сериализаторы здесь
+        """Получение обновлённых групп"""
         from chat.models import Chat
         from .serializers import ChatSerializer
 
@@ -128,7 +139,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return GroupSerializer(groups, many=True).data
 
     async def update_chat_list(self, event):
-        # Обработка новых типов сообщений для чатов
+        """Обработка новых типов сообщений для чатов"""
         chats = event['chats']
         await self.send(text_data=json.dumps({
             'type': 'update_chats',
@@ -136,7 +147,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     async def update_group_list(self, event):
-        # Обработка новых типов сообщений для групп
+        """Обработка новых типов сообщений для групп"""
         groups = event['groups']
         await self.send(text_data=json.dumps({
             'type': 'update_groups',
@@ -144,13 +155,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     async def chat_message(self, event):
-        chat_data = event['chat']
+        """Обновление информации о чате"""
+        chat_data = event['chat'] # извлечение данных
         await self.send(text_data=json.dumps({
             'type': 'chat',
             'chat': chat_data,
-        }))
+        })) # отправка
 
     async def new_message(self, event):
+        """Обновление информации о новом сообщении в чате"""
         message_data = event['message']
         await self.send(text_data=json.dumps({
             'type': 'new_message',
@@ -161,6 +174,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     async def group_message(self, event):
+        """Обновление информации о группе"""
         group_data = event['group']
         await self.send(text_data=json.dumps({
             'type': 'group',

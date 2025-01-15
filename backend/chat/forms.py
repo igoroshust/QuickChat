@@ -1,6 +1,6 @@
-from allauth.account.forms import SignupForm
-from django.contrib.auth import login
 from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth import login
+from allauth.account.forms import SignupForm
 from django import forms
 from .models import *
 
@@ -20,6 +20,7 @@ class CustomSignupForm(SignupForm):
         return user
 
 class UserProfileForm(forms.ModelForm):
+    """Профиль пользователя"""
     class Meta:
         model = CustomUser
         fields = ['username', 'about', 'photo']
@@ -30,6 +31,7 @@ class UserProfileForm(forms.ModelForm):
         }
 
 class GroupForm(forms.ModelForm):
+    """Создание группы"""
     class Meta:
         model = Group
         fields =['name', 'image']

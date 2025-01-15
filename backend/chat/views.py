@@ -1,4 +1,3 @@
-import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
@@ -10,14 +9,17 @@ from .forms import CustomSignupForm, UserProfileForm, GroupForm
 from .models import CustomUser, Message, Group, Chat
 from django.db.models import Q
 from django.http import Http404
+import logging
 
 logger = logging.getLogger(__name__)
 
 def index(request):
+    """Приветственная страница для неавторизованного пользователя"""
     return render(request, '../templates/home.html')
 
 
 def login_view(request):
+    """Авторизация"""
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -31,6 +33,7 @@ def login_view(request):
 
 
 def signup(request):
+    """Регистрация"""
     if request.method == 'POST':
         form = CustomSignupForm(request.POST)
         if form.is_valid():
@@ -42,105 +45,50 @@ def signup(request):
 
 
 def main(request):
+    """Главная страница внутри приложения"""
     return render(request, '../templates/chat/main.html')
 
 
 def sidebar(request):
+    """Сайдбар"""
     return render(request, '../templates/chat/components/sidebar.html')
 
 
-def empty_main(request):
-    return render(request, '../templates/chat/empty-main.html')
-
 @login_required
 def user_list(request):
+    """Список пользователей"""
     users = CustomUser.objects.exclude(username=request.user.username)
     return render(request, '../templates/chat/user-list.html', {'users': users})
 
 @login_required
 def user_profile(request, user):
+    """Профиль пользователя"""
     user_object = get_object_or_404(CustomUser , username=user)
     return render(request, '../templates/chat/user-profile.html', {
         'user': request.user,  # Передаем текущего пользователя
         'profile_user': user_object  # Передаем пользователя профиля
     })
 
-@login_required
-def create_group(request):
-    if request.method == 'POST':
-        group_name = request.POST['group_name']
-        group_avatar = request.POST.get('group_avatar', '')
-        members = request.POST['members'].split(',')  # Разделяем участников по запятой
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+    """Редактирование профиля"""
+    model = CustomUser
+    form_class = UserProfileForm
+    template_name = '../templates/chat/edit-profile.html'
+    success_url = reverse_lazy('main')
 
-        # Создаём группу
-        group = Group.objects.create(name=group_name, image=group_avatar)
+    def get_object(self, queryset=None):
+        return self.request.user # Возвращаем только аутентифицированного пользователя
 
-        # Добавляем участников в группу
-        for member in members:
-            user = get_object_or_404(CustomUser , username=member.strip())
-            group.members.add(user)
-            logger.info(f'Пользователь "{user.username}" добавлен в группу "{group.name}".')
+    def form_valid(self, form):
+        """Обработка загрузки аватара"""
+        if self.request.FILES.get('photo'):
+            form.instance.photo = self.request.FILES['photo']
+        return super().form_valid(form) # Сохраняем форму
 
-        # Перенаправляем на страницу чата группы
-        return redirect('group_chat_view', group_id=group.id)
-
-    return render(request, '../templates/chat/create-group.html')
-
-
-@login_required
-def group_chat_view(request, group_id):
-    group = get_object_or_404(Group, id=group_id)
-
-    # Обновляем статус всех непрочитанных сообщений для текущего пользователя
-    Message.objects.filter(group=group, is_read=False).exclude(sender=request.user).update(is_read=True)
-
-    # Получаем сообщения, связанные с этой группой, и сортируем их по времени
-    messages = Message.objects.filter(group=group).order_by('timestamp')
-
-    # Подсчитываем количество непрочитанных сообщений для текущего пользователя в этой группе
-    unread_count = Message.objects.filter(group=group, is_read=False).exclude(sender=request.user).count()
-
-    return render(request, 'chat/chat.html', {
-        'messages': messages,
-        'chat_title': group.name,
-        'chat_avatar_url': group.image.url if group.image else None,
-        'chat_type': 'group',
-        'group': group,
-        'unread_count': unread_count
-    })
-
-@login_required
-def send_message(request):
-    if request.method == 'POST':
-        content = request.POST['content']
-        group_id = request.POST.get('group_id')  # Получите ID группы из формы
-        receiver_username = request.POST.get('receiver')  # Получаем имя получателя, если это личный чат
-
-        if group_id:  # Если ID группы присутствует, значит, это групповой чат
-            group = get_object_or_404(Group, id=group_id)
-            # Создайте сообщение с указанием группы
-            message = Message.objects.create(sender=request.user, content=content, group=group)
-            return redirect('group_chat_view', group_id=group.id)  # Перенаправление на групповой чат
-        elif receiver_username:  # Если это личный чат
-            receiver = get_object_or_404(CustomUser , username=receiver_username)
-            # Получаем или создаем чат между пользователями
-            chat, created = Chat.objects.get_or_create(user1=request.user, user2=receiver)
-
-            # Проверяем, что чат был успешно получен или создан
-            if chat:
-                # Создайте сообщение с указанием чата
-                message = Message.objects.create(sender=request.user, receiver=receiver, content=content, chat=chat)
-                return redirect('personal_chat', user=receiver_username)  # Перенаправление на личный чат
-            else:
-                # Обработка случая, когда чат не был создан
-                return redirect('main')  # Или обработайте ошибку
-        else:
-            return redirect('main')  # Если ни то, ни другое, перенаправляем на главную страницу
-
-    return redirect('main')  # Если метод не POST, перенаправляем на главную страницу
 
 @login_required
 def chat_view(request, user):
+    """Личная переписка"""
     other_user = get_object_or_404(CustomUser , username=user)
 
     # Обновляем статус всех непрочитанных сообщений
@@ -164,8 +112,70 @@ def chat_view(request, user):
         'unread_count': unread_count,  # Количество непрочитанных сообщений
     })
 
+class ChatDeleteView(LoginRequiredMixin, DeleteView):
+    """Удаление личной переписки"""
+    model = Chat
+    template_name = '../templates/chat/actions/delete-chat.html'  # Шаблон для подтверждения удаления
+    success_url = reverse_lazy('main')  # URL для перенаправления после успешного удаления
+
+    def get_object(self, queryset=None):
+        """Получаем объект для удаления"""
+        other_user_username = self.kwargs['user']
+        other_user = get_object_or_404(CustomUser , username=other_user_username)
+
+        # Ищем чат, где текущий пользователь является user1 или user2
+        chat = Chat.objects.filter(
+            Q(user1=self.request.user, user2=other_user) |
+            Q(user1=other_user, user2=self.request.user)
+        ).first()  # Получаем первый найденный чат или None
+
+        if chat is None:
+            raise Http404("Chat does not exist")  # Если чат не найден, выбрасываем 404
+
+        return chat
+
+    def get_context_data(self, **kwargs):
+        """Добавление дополнительного контекста в шаблон"""
+        context = super().get_context_data(**kwargs)
+        context['other_user'] = self.get_object().user2 if self.get_object().user1 == self.request.user else self.get_object().user1
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        chat = self.get_object()
+        # Удаляем все сообщения, связанные с чатом
+        messages = Message.objects.filter(chat=chat)
+        messages_count = messages.count()  # Считаем количество сообщений для отладки
+        messages.delete()  # Удаляем все сообщения, связанные с этим чатом
+        logger.info(f"Deleted {messages_count} messages from chat between {chat.user1.username} and {chat.user2.username}.")  # Логируем удаление
+        return super().delete(request, *args, **kwargs)  # Удаляем сам чат
+
+@login_required
+def group_chat_view(request, group_id):
+    """Групповой чат"""
+    group = get_object_or_404(Group, id=group_id)
+
+    # Обновляем статус всех непрочитанных сообщений для текущего пользователя
+    Message.objects.filter(group=group, is_read=False).exclude(sender=request.user).update(is_read=True)
+
+    # Получаем сообщения, связанные с этой группой, и сортируем их по времени
+    messages = Message.objects.filter(group=group).order_by('timestamp')
+
+    # Подсчитываем количество непрочитанных сообщений для текущего пользователя в этой группе
+    unread_count = Message.objects.filter(group=group, is_read=False).exclude(sender=request.user).count()
+
+    return render(request, 'chat/chat.html', {
+        'messages': messages,
+        'chat_title': group.name,
+        'chat_avatar_url': group.image.url if group.image else None,
+        'chat_type': 'group',
+        'group': group,
+        'unread_count': unread_count
+    })
+
+
 @login_required
 def add_members(request, group_id):
+    """Добавление участника в группу"""
     group = get_object_or_404(Group, id=group_id)
 
     if request.method == 'POST':
@@ -189,53 +199,8 @@ def add_members(request, group_id):
 
     return render(request, '../templates/chat/actions/add-members.html', {'group': group})
 
-
-def update_group(request):
-    return render(request, '../templates/chat/actions/update-group.html')
-
-
-def delete_group(request):
-    return render(request, '../templates/chat/actions/delete-group.html')
-
-@login_required
-def delete_chat(request, user):
-    return render(request, '../templates/chat/actions/delete-chat.html', {'user': user})
-
-
-@login_required
-def edit_profile(request):
-    user_object = request.user
-
-    if request.method == 'POST':
-        user_object.username = request.POST.get('username', user_object.username)
-        user_object.about = request.POST.get('about', user_object.about)
-
-        # Обработка загрузки аватара
-        if request.FILES.get('avatar'):
-            user_object.photo = request.FILES['avatar']
-
-        user_object.save()
-        return redirect('main')
-
-    return render(request, '../templates/chat/edit-profile.html', {'user': user_object})
-
-class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
-    model = CustomUser
-    form_class = UserProfileForm
-    template_name = '../templates/chat/edit-profile.html'
-    success_url = reverse_lazy('main')
-
-    def get_object(self, queryset=None):
-        return self.request.user # Возвращаем только аутентифицированного пользователя
-
-    def form_valid(self, form):
-        """Обработка загрузки аватара"""
-        if self.request.FILES.get('photo'):
-            form.instance.photo = self.request.FILES['photo']
-        return super().form_valid(form) # Сохраняем форму
-
-
 class GroupCreateView(LoginRequiredMixin, CreateView):
+    """Создание группы"""
     model = Group
     form_class = GroupForm
     template_name = '../templates/chat/create-group.html'
@@ -263,6 +228,7 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
         return redirect('group_chat_view', group_id=group.id)  # Здесь мы перенаправляем на страницу чата группы
 
 class GroupUpdateView(LoginRequiredMixin, UpdateView):
+    """Обновление группы"""
     model = Group
     form_class = GroupForm
     template_name = '../templates/chat/actions/update-group.html'
@@ -294,43 +260,11 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('group_chat_view', kwargs={'group_id': self.object.id})
 
 class GroupDeleteView(LoginRequiredMixin, DeleteView):
+    """Удаление группы"""
     model = Group
     template_name = '../templates/chat/actions/delete-group.html'
     success_url = reverse_lazy('main')  # Перенаправление после успешного удаления
 
     def get_object(self, queryset=None):
+        """Получаем объект для удаления"""
         return get_object_or_404(Group, id=self.kwargs['pk'])  # Получаем группу по ID
-
-class ChatDeleteView(LoginRequiredMixin, DeleteView):
-    model = Chat
-    template_name = '../templates/chat/actions/delete-chat.html'  # Шаблон для подтверждения удаления
-    success_url = reverse_lazy('main')  # URL для перенаправления после успешного удаления
-
-    def get_object(self, queryset=None):
-        other_user_username = self.kwargs['user']
-        other_user = get_object_or_404(CustomUser , username=other_user_username)
-
-        # Ищем чат, где текущий пользователь является user1 или user2
-        chat = Chat.objects.filter(
-            Q(user1=self.request.user, user2=other_user) |
-            Q(user1=other_user, user2=self.request.user)
-        ).first()  # Получаем первый найденный чат или None
-
-        if chat is None:
-            raise Http404("Chat does not exist")  # Если чат не найден, выбрасываем 404
-
-        return chat
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['other_user'] = self.get_object().user2 if self.get_object().user1 == self.request.user else self.get_object().user1
-        return context
-
-    def delete(self, request, *args, **kwargs):
-        chat = self.get_object()
-        # Удаляем все сообщения, связанные с чатом
-        messages = Message.objects.filter(chat=chat)
-        messages_count = messages.count()  # Считаем количество сообщений для отладки
-        messages.delete()  # Удаляем все сообщения, связанные с этим чатом
-        logger.info(f"Deleted {messages_count} messages from chat between {chat.user1.username} and {chat.user2.username}.")  # Логируем удаление
-        return super().delete(request, *args, **kwargs)  # Удаляем сам чат
