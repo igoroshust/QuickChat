@@ -83,6 +83,10 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
                     'avatar_url': avatar_url
                 }
             )
+
+            # После сохранения сообщения
+            await self.send_sidebar_update(receiver)
+
         except Exception as e:
             print(f"Ошибка при получении: {e}")
 
@@ -98,6 +102,24 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             'username': username,
             'avatar_url': avatar_url
         }))
+
+    async def send_sidebar_update(self, receiver):
+        """Отправка обновления в сайдбар для получателя"""
+        chat_data = {
+            'id': chat.id,
+            'user_username': receiver.username,
+            'user_avatar': receiver.photo.url,
+            'unread_count': 1,  # Увеличиваем счетчик непрочитанных сообщений
+        }
+
+        print(f"Отправка события chat_created для {receiver.username}")
+        await self.channel_layer.group_send(
+            f'api_chat_sidebar_{receiver.username}',  # Уникальная группа для сайдбара
+            {
+                'type': 'chat_updated',
+                'chat_data': chat_data,
+            }
+        )
 
 
 class ChatConsumer(AsyncWebsocketConsumer):

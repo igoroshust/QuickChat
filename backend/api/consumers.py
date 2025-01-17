@@ -1,7 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 
-class PersonalChatConsumer(AsyncWebsocketConsumer):
+class ChatSideBarConsumer(AsyncWebsocketConsumer):
     """Потребитель для личных чатов"""
 
     async def connect(self):
@@ -44,6 +44,15 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             )
             await self.send_message_update(message)
 
+            if created:  # Если чат был создан
+                chat_data = {
+                    'id': chat.id,
+                    'user_username': chat.user2.username,
+                    'user_avatar': chat.user2.photo.url,
+                    'unread_count': 0,  # Или другое значение по умолчанию
+                }
+                await self.create_chat(chat_data)
+
     async def send_message_update(self, message):
         """Отправка обновления сообщения всем участникам личного чата"""
         message_data = {
@@ -74,6 +83,24 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             'avatar_url': message_data['avatar_url'],
         }))
 
+    async def create_chat(self, chat_data):
+        """Создание нового чата и отправка обновления всем участникам"""
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_created',
+                'chat_data': chat_data,
+            }
+        )
+
+    async def chat_created(self, event):
+        """Обработка события создания нового чата"""
+        chat_data = event['chat_data']
+        await self.send(text_data=json.dumps({
+            'type': 'chat_created',
+            'chat_data': chat_data,
+        }))
+
     async def delete_chat(self, chat_id):
         """Удаление чата и отправка обновления всем участникам"""
         # Удаление чата из базы данных
@@ -96,8 +123,15 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             'chat_id': chat_id,
         }))
 
+    async def chat_updated(self, event):
+        """Обработка обновления чата"""
+        chat_data = event['chat_data']
+        await self.send(text_data=json.dumps({
+            'type': 'chat_updated',
+            'chat_data': chat_data,
+        }))
 
-class GroupChatConsumer(AsyncWebsocketConsumer):
+class GroupSideBarConsumer(AsyncWebsocketConsumer):
     """Потребитель для групповых чатов"""
 
     async def connect(self):
@@ -162,4 +196,20 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             'message': message_data['message'],
             'username': message_data['username'],
             'avatar_url': message_data['avatar_url'],
+        }))
+
+    async def group_created(self, event):
+        """Обработка события создания группы"""
+        group_data = event['group_data']
+        await self.send(text_data=json.dumps({
+            'type': 'group_created',
+            'group_data': group_data,
+        }))
+
+    async def group_deleted(self, event):
+        """Обработка события удаления группы"""
+        group_id = event['group_id']
+        await self.send(text_data=json.dumps({
+            'type': 'group_deleted',
+            'group_id': group_id,
         }))

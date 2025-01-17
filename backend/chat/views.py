@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import UpdateView, CreateView, DeleteView
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
@@ -146,6 +148,27 @@ class ChatDeleteView(LoginRequiredMixin, DeleteView):
         messages = Message.objects.filter(chat=chat)
         messages_count = messages.count()  # Считаем количество сообщений для отладки
         messages.delete()  # Удаляем все сообщения, связанные с этим чатом
+
+        # Отправка обновления в сайдбар
+        chat_data = {
+            'chat_id': chat.id,
+        }
+        # Отправляем обновление в группу сайдбара
+        async_to_sync(channel_layer.group_send)(
+            f'api_chat_sidebar_{chat.user1.username}',
+            {
+                'type': 'chat_deleted',
+                'chat_data': chat_data,
+            }
+        )
+        async_to_sync(channel_layer.group_send)(
+            f'api_chat_sidebar_{chat.user2.username}',
+            {
+                'type': 'chat_deleted',
+                'chat_data': chat_data,
+            }
+        )
+
         logger.info(f"Deleted {messages_count} messages from chat between {chat.user1.username} and {chat.user2.username}.")  # Логируем удаление
         return super().delete(request, *args, **kwargs)  # Удаляем сам чат
 
@@ -225,6 +248,21 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
                 form.add_error('members', f'Пользователь с именем "{member}" не найден.')
                 # Перенаправляем на страницу чата группы
 
+        # Отправка обновления в сайдбар
+        group_data = {
+            'id': group.id,
+            'group_name': group.name,
+            'group_image': group.image.url if group.image else None,
+        }
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f'api_group_sidebar_{self.request.user.username}',  # Уникальная группа для сайдбара
+            {
+                'type': 'group_created',
+                'group_data': group_data,
+            }
+        )
+
         return redirect('group_chat_view', group_id=group.id)  # Здесь мы перенаправляем на страницу чата группы
 
 class GroupUpdateView(LoginRequiredMixin, UpdateView):
@@ -268,3 +306,21 @@ class GroupDeleteView(LoginRequiredMixin, DeleteView):
     def get_object(self, queryset=None):
         """Получаем объект для удаления"""
         return get_object_or_404(Group, id=self.kwargs['pk'])  # Получаем группу по ID
+
+    def delete(self, request, *args, **kwargs):
+        group = self.get_object()
+        # Удаляем все сообщения, связанные с группой
+        messages = Message.objects.filter(group=group)
+        messages.delete()  # Удаляем все сообщения, связанные с этой группой
+
+        # Отправка обновления в сайдбар
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f'api_group_sidebar_{self.request.user.username}',  # Уникальная группа для сайдбара
+            {
+                'type': 'group_deleted',
+                'group_id': group.id,
+            }
+        )
+
+        return super().delete(request, *args, **kwargs)  # Удаляем саму группу
