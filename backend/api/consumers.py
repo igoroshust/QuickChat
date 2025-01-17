@@ -53,6 +53,7 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             'avatar_url': message.sender.avatar.url,
             'user2_username': message.chat.user2.username,
             'user2_avatar': message.chat.user2.photo.url,
+            'unread_count': await self.get_unread_count(message.chat),
         }
         await self.channel_layer.group_send(
             self.room_group_name,

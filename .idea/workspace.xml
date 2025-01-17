@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="05504364-ef91-482e-93ef-a27c81512f3d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/consumers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/backend/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/chat/actions/update-group.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/actions/update-group.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +46,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Python313/projects/QuickChat/backend/chat/static/chat/images",
+    "last_opened_file_path": "C:/Python313/projects/QuickChat",
     "settings.editor.selected.configurable": "terminal"
   }
 }]]></component>
