@@ -85,10 +85,11 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             )
 
             # После сохранения сообщения
-            await self.send_sidebar_update(receiver)
+            await self.send_sidebar_update(receiver, chat)
 
         except Exception as e:
             print(f"Ошибка при получении: {e}")
+
 
     async def chat_message(self, event):
         """Получение сообщения в чате"""
@@ -98,12 +99,13 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
 
         # Отправка данных клиенту (в JSON-формате)
         await self.send(text_data=json.dumps({
+            # 'type': 'new_message',
             'message': message,
             'username': username,
             'avatar_url': avatar_url
         }))
 
-    async def send_sidebar_update(self, receiver):
+    async def send_sidebar_update(self, receiver, chat):
         """Отправка обновления в сайдбар для получателя"""
         chat_data = {
             'id': chat.id,
@@ -122,7 +124,7 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         )
 
 
-class ChatConsumer(AsyncWebsocketConsumer):
+class GroupChatConsumer(AsyncWebsocketConsumer):
     """Групповые чаты - потребители WS-соединения"""
     async def connect(self):
         """Установка соединения между клиентом и сервером"""
@@ -203,3 +205,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': username,
             'avatar_url': avatar_url
         }))
+
+
+    # async def chat_message(self, event):
+    #     """Получение сообщения в чате"""
+    #     print("Полученные данные:", event)  # Отладка
+    #     message_data = event['message']  # Это должно быть словарем
+    #     await self.send(text_data=json.dumps({
+    #         'type': 'new_message',
+    #         'chat_id': message_data['chat_id'],  # Убедитесь, что это словарь
+    #         'message': message_data['message'],
+    #         'username': message_data['username'],
+    #         'avatar_url': message_data['avatar_url'],
+    #     }))

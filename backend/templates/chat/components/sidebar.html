@@ -108,6 +108,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                 console.log('Обработка создания чата'); // Отладка
                                 addChat(data.chat_data);
                                 break;
+                            case 'chat_updated':
+                                console.log('Обновление чата:', data.chat_data); // Отладка
+                                updateSidebar(data.chat_data); // Обновите ваш сайдбар здесь
+                                break;
+
                             case 'group_created':
                                 console.log('Обработка создания группы'); // Отладка
                                 addGroup(data.group_data);
@@ -292,6 +297,25 @@ document.addEventListener("DOMContentLoaded", function() {
     const groupElement = document.querySelector(`a[href="/group-chat/${groupId}/"]`);
     if (groupElement) {
         groupElement.parentElement.remove(); // Удаляем элемент из DOM
+    }
+
+    // Функция для обновления сайдбара
+    function updateSidebar(chatData) {
+        const chatList = document.getElementById('chatList');
+        const li = document.createElement('li');
+        li.className = 'mb-2';
+        li.innerHTML = `
+            <a class="flex items-center justify-between p-2 bg-gray-100 rounded-lg" href="/personal-chat/${chatData.user_username}/">
+                <div class="flex items-center">
+                    <img alt="Chat avatar" class="w-8 h-8 rounded-full" src="${chatData.user_avatar || 'default_avatar_url.jpg'}" />
+                    <span class="ml-3 text-gray-500">${chatData.user_username || 'Без имени'}</span>
+                </div>
+                <span class="flex items-center justify-center bg-blue-500 text-white rounded-full w-5 h-5 ml-2 text-xs unread-count">
+                    ${chatData.unread_count || 0}
+                </span>
+            </a>
+        `;
+        chatList.appendChild(li);
     }
 }
 

@@ -183,7 +183,7 @@
             const messageInputDom = document.getElementById('message-input');
             const message = messageInputDom.value;
 
-            console.log('Отправлено сообщение:', message);  // Отладочный вывод
+            console.log('Отправлено сообщение (chat):', message);  // Отладочный вывод
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': '{{ request.user.username }}',  // Имя пользователя

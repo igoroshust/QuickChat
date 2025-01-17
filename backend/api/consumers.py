@@ -1,4 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
 import json
 
 class ChatSideBarConsumer(AsyncWebsocketConsumer):
@@ -53,6 +54,28 @@ class ChatSideBarConsumer(AsyncWebsocketConsumer):
                 }
                 await self.create_chat(chat_data)
 
+    # async def chat_message(self, event):
+    #     """Получение сообщения в чате"""
+    #     print("Полученные данные:", event)  # Отладка
+    #     message_data = event['message']  # Это должно быть словарем
+    #     await self.send(text_data=json.dumps({
+    #         'type': 'new_message',
+    #         'chat_id': message_data['chat_id'],  # Убедитесь, что это словарь
+    #         'message': message_data['message'],
+    #         'username': message_data['username'],
+    #         'avatar_url': message_data['avatar_url'],
+    #     }))
+
+    async def create_chat(self, chat_data):
+        """Создание нового чата и отправка обновления всем участникам"""
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_created',
+                'chat_data': chat_data,
+            }
+        )
+
     async def send_message_update(self, message):
         """Отправка обновления сообщения всем участникам личного чата"""
         message_data = {
@@ -83,7 +106,7 @@ class ChatSideBarConsumer(AsyncWebsocketConsumer):
             'avatar_url': message_data['avatar_url'],
         }))
 
-    async def create_chat(self, chat_data):
+    async def send_chat_creation_update(self, chat_data):
         """Создание нового чата и отправка обновления всем участникам"""
         await self.channel_layer.group_send(
             self.room_group_name,
