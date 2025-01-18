@@ -7,20 +7,7 @@
     <list default="true" id="05504364-ef91-482e-93ef-a27c81512f3d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/backend/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chat/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/media/images/user-photo.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/media/images/user-photo.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/chat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/components/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/components/sidebar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/create-group.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/create-group.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/templates/chat/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/chat/signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
