@@ -78,7 +78,10 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
                 receiver_group_name,
                 {
                     'type': 'chat_message',
-                    'message': message,
+                    'message': {
+                        'content': message,
+                        'chat_id': chat.id,
+                    },
                     'username': username,
                     'avatar_url': avatar_url
                 }
@@ -90,20 +93,33 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f"Ошибка при получении: {e}")
 
+    # async def chat_message(self, event):
+    #     """Новое сообщение в чате"""
+    #     message = event['message']
+    #     username = event['username']
+    #     avatar_url = event['avatar_url']
+    #
+    #     # Отправка данных клиенту (в JSON)
+    #     await self.send(text_data=json.dumps({
+    #         'message': message,
+    #         'username': username,
+    #         'avatar_url': avatar_url
+    #     }))
 
     async def chat_message(self, event):
-        """Получение сообщения в чате"""
-        message = event['message']
-        username = event['username']
-        avatar_url = event['avatar_url']
+        """Обработка нового сообщения в чате"""
+        message_data = event['message']  # Это должно быть словарем
+        username = event.get('username')  # Используйте get для избежания KeyError
+        avatar_url = event.get('avatar_url')  # Используйте get для избежания KeyError
 
-        # Отправка данных клиенту (в JSON-формате)
         await self.send(text_data=json.dumps({
-            # 'type': 'new_message',
-            'message': message,
-            'username': username,
-            'avatar_url': avatar_url
+            'type': 'new_message',
+            'chat_id': message_data.get('chat_id'),
+            'message': message_data['content'],
+            'username': username,  # Теперь это безопасно
+            'avatar_url': avatar_url,  # Теперь это безопасно
         }))
+
 
     async def send_sidebar_update(self, receiver, chat):
         """Отправка обновления в сайдбар для получателя"""
@@ -169,7 +185,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             group = await database_sync_to_async(Group.objects.get)(id=self.room_name)
 
             # Сохраняем сообщение
-            await database_sync_to_async(Message.objects.create)(
+            message_instance = await database_sync_to_async(Message.objects.create)(
                 sender=self.scope["user"],
                 content=message,
                 group=group
@@ -181,8 +197,11 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'chat_message',
-                    'message': message,
+                    'type': 'chat_message',  # Убедитесь, что тип сообщения правильный
+                    'message': {  # Убедитесь, что это словарь
+                        'content': message,
+                        'chat_id': group.id,  # Или другой идентификатор группы
+                    },
                     'username': username,
                     'avatar_url': avatar_url
                 }
@@ -194,27 +213,15 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             print(f"Ошибка отправки: {e}")
 
     async def chat_message(self, event):
-        """Новое сообщение в чате"""
-        message = event['message']
-        username = event['username']
-        avatar_url = event['avatar_url']
+        """Обработка нового сообщения в чате"""
+        message_data = event['message']  # Это должно быть словарем
+        username = event.get('username')  # Используйте get для избежания KeyError
+        avatar_url = event.get('avatar_url')  # Используйте get для избежания KeyError
 
-        # Отправка данных клиенту (в JSON)
         await self.send(text_data=json.dumps({
-            'message': message,
-            'username': username,
-            'avatar_url': avatar_url
+            'type': 'new_message',
+            'chat_id': message_data.get('chat_id'),
+            'message': message_data['content'],
+            'username': username,  # Теперь это безопасно
+            'avatar_url': avatar_url,  # Теперь это безопасно
         }))
-
-
-    # async def chat_message(self, event):
-    #     """Получение сообщения в чате"""
-    #     print("Полученные данные:", event)  # Отладка
-    #     message_data = event['message']  # Это должно быть словарем
-    #     await self.send(text_data=json.dumps({
-    #         'type': 'new_message',
-    #         'chat_id': message_data['chat_id'],  # Убедитесь, что это словарь
-    #         'message': message_data['message'],
-    #         'username': message_data['username'],
-    #         'avatar_url': message_data['avatar_url'],
-    #     }))

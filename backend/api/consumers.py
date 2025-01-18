@@ -55,16 +55,31 @@ class ChatSideBarConsumer(AsyncWebsocketConsumer):
                 await self.create_chat(chat_data)
 
     # async def chat_message(self, event):
-    #     """Получение сообщения в чате"""
-    #     print("Полученные данные:", event)  # Отладка
-    #     message_data = event['message']  # Это должно быть словарем
+    #     """Новое сообщение в чате"""
+    #     message = event['message']
+    #     username = event['username']
+    #     avatar_url = event['avatar_url']
+    #
+    #     # Отправка данных клиенту (в JSON)
     #     await self.send(text_data=json.dumps({
-    #         'type': 'new_message',
-    #         'chat_id': message_data['chat_id'],  # Убедитесь, что это словарь
-    #         'message': message_data['message'],
-    #         'username': message_data['username'],
-    #         'avatar_url': message_data['avatar_url'],
+    #         'message': message,
+    #         'username': username,
+    #         'avatar_url': avatar_url
     #     }))
+
+    async def chat_message(self, event):
+        """Обработка нового сообщения в чате"""
+        message_data = event['message']  # Это должно быть словарем
+        username = event.get('username')  # Используйте get для избежания KeyError
+        avatar_url = event.get('avatar_url')  # Используйте get для избежания KeyError
+
+        await self.send(text_data=json.dumps({
+            'type': 'new_message',
+            'chat_id': message_data.get('chat_id'),
+            'message': message_data['content'],
+            'username': username,  # Теперь это безопасно
+            'avatar_url': avatar_url,  # Теперь это безопасно
+        }))
 
     async def create_chat(self, chat_data):
         """Создание нового чата и отправка обновления всем участникам"""

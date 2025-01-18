@@ -14,6 +14,13 @@ class ChatSerializer(serializers.ModelSerializer):
     def get_unread_count(self, obj):
         """Непрочитанные сообщения"""
         user = self.context['request'].user # получаем текущего пользователя
+
+        current_chat_user = self.context.get('current_chat_user')  # Получаем текущего собеседника
+
+        # Если текущий собеседник совпадает с собеседником чата, не считаем непрочитанные сообщения
+        if current_chat_user and (current_chat_user == obj.user1 or current_chat_user == obj.user2):
+            return 0
+
         # Считаем непрочитанные сообщения для него
         return Message.objects.filter(chat=obj, receiver=user, is_read=False).count()
 
