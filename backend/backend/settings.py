@@ -1,5 +1,5 @@
 from pathlib import Path
-import chat
+import chat, api
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -145,7 +145,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -169,6 +168,9 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
         },
+        'console': {
+            'class': 'logging.StreamHandler',
+        }
     },
     'loggers': {
         'django': {
@@ -179,6 +181,11 @@ LOGGING = {
         'chat': {  # Замените на имя вашего приложения
             'handlers': ['file'],
             'level': 'WARNING',
+            'propagate': False,
+        },
+        'api': {  # Замените на имя вашего приложения
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': False,
         },
     },
@@ -192,7 +199,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],  # Убедитесь, что Redis запущен
+            "hosts": [('127.0.0.1', 6379)],
         },
     },
 }

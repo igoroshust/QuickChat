@@ -14,11 +14,13 @@
 
 ### Данные для входа
 
-| Логин       | Пароль  | 
-|-------------|---------|
-| igor        | myS3cr3tP@ssw0rd! | 
-| andrei      | myS3cr3tP@ssw0rd! | 
-| veronika    | myS3cr3tP@ssw0rd! | 
+| Логин    | Пароль  | 
+|----------|---------|
+| igor     | myS3cr3tP@ssw0rd! | 
+| andrei   | myS3cr3tP@ssw0rd! | 
+| veronika | myS3cr3tP@ssw0rd! | 
+| victor   | myS3cr3tP@ssw0rd! | 
+| anna     | myS3cr3tP@ssw0rd! | 
 
 
 ### Ключевые маршруты

@@ -6,7 +6,11 @@ from rest_framework import viewsets
 from chat.models import Chat, Group, Message
 from django.db.models import Q
 from django.http import Http404
-
+from rest_framework.decorators import action
+from rest_framework import status
+# import logging
+#
+# logger = logging.getLogger(__name__)
 
 class ChatViewSet(viewsets.ReadOnlyModelViewSet):
     """Представление для списка Чатов"""
@@ -28,6 +32,24 @@ class ChatViewSet(viewsets.ReadOnlyModelViewSet):
             'current_chat_user')  # Получаем текущего собеседника из параметров запроса
         return context
 
+    @action(detail=False, methods=['post'], url_path='update-read-status')
+    def update_read_status(self, request):
+        current_chat_user = request.data.get('current_chat_user')
+        if not current_chat_user:
+            return Response({'error': 'Текущий собеседник не указан'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Получаем чат, в котором участвует текущий пользователь и указанный собеседник
+        chat = Chat.objects.filter(
+            (Q(user1=request.user) & Q(user2=current_chat_user)) |
+            (Q(user2=request.user) & Q(user1=current_chat_user))
+        ).first()
+
+        if chat:
+            # Обновляем статус всех непрочитанных сообщений
+            Message.objects.filter(chat=chat, receiver=request.user, is_read=False).update(is_read=True)
+
+        return Response({'status': 'success'})
+
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     """Представление для списка Групп"""
     queryset = Group.objects.all()
@@ -41,18 +63,19 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer_context(self):
         """Расширяем контекст для сериализатора Группы, добавляя объект запроса"""
         context = super().get_serializer_context()
-        context['request'] = self.request # Передаём текущий запрос в контекст
+        context['request'] = self.request  # Передаём текущий запрос в контекст
+        context['current_group_id'] = self.request.GET.get('current_group_id')  # Получаем текущую группу из параметров запроса
         return context
 
-class MarkMessagesAsReadView(APIView):
+class UpdateUnreadCountView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        current_chat_user = request.GET.get('current_chat_user')
+        current_chat_user = request.data.get('current_chat_user')
         if not current_chat_user:
-            return Response({'error': 'Пользователь не указан'}, status=400)
+            return Response({'error': 'Текущий собеседник не указан'}, status=400)
 
-        # Обновляем все непрочитанные сообщения для текущего пользователя
-        Message.objects.filter(receiver=request.user, sender__username=current_chat_user, is_read=False).update(is_read=True)
+        # Сброс статуса непрочитанных сообщений
+        Message.objects.filter(receiver=request.user, sender=current_chat_user, is_read=False).update(is_read=True)
 
         return Response({'status': 'success'})

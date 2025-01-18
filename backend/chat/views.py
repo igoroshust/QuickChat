@@ -324,3 +324,5 @@ class GroupDeleteView(LoginRequiredMixin, DeleteView):
         )
 
         return super().delete(request, *args, **kwargs)  # Удаляем саму группу
+
+

@@ -22,7 +22,7 @@ class ChatSerializer(serializers.ModelSerializer):
             return 0
 
         # Считаем непрочитанные сообщения для него
-        return Message.objects.filter(chat=obj, receiver=user, is_read=False).count()
+        return Message.objects.filter(chat=obj, receiver=user, is_read=False).exclude(sender=user).count()
 
     def to_representation(self, instance):
         """Переопределяем метод для возврата правильного собеседника"""
