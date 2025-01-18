@@ -132,7 +132,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_USE_TLS = True  # Установите на True, если используете порт 587
 # # EMAIL_USE_SSL = True  # Установите на True, если используете порт 465
 # EMAIL_HOST_USER = 'igoroshust@yandex.ru'  # Ваш адрес электронной почты на Яндексе
-# EMAIL_HOST_PASSWORD = 'Lam3r.wOw123'  # Ваш пароль от Яндекс.Почты
+# EMAIL_HOST_PASSWORD = ''  # Ваш пароль от Яндекс.Почты
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
