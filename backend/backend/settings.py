@@ -16,7 +16,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,7 +39,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-'whitenoise.middleware.WhiteNoiseMiddleware', # статические файлы в продакш-среде (+daphne)
+    'whitenoise.middleware.WhiteNoiseMiddleware', # статические файлы в продакш-среде (+daphne)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -149,6 +148,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 
@@ -178,12 +178,12 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': True,
         },
-        'chat': {  # Замените на имя вашего приложения
+        'chat': {
             'handlers': ['file'],
             'level': 'WARNING',
             'propagate': False,
         },
-        'api': {  # Замените на имя вашего приложения
+        'api': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
